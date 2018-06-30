@@ -1,0 +1,11 @@
+package: github.com/jefurry/gola
+import:
+- package: github.com/mitchellh/go-homedir
+- package: github.com/pkg/errors
+  version: ^0.8.0
+- package: github.com/yuin/gopher-lua
+testImport:
+- package: github.com/stretchr/testify
+  version: ^1.2.2
+  subpackages:
+  - assert
