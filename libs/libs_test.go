@@ -17,6 +17,7 @@ import (
 func TestBaseLib(t *testing.T) {
 	L := lua.NewState()
 	OpenLibs(L)
+	defer L.Close()
 
 	code := `
 	local os = require('os')

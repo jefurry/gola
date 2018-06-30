@@ -42,5 +42,7 @@ func TestNewLState(t *testing.T) {
 		if !assert.Equal(t, true, ls.isExpire(), "value mismatching") {
 			return
 		}
+
+		ls.close()
 	}
 }

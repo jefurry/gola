@@ -15,6 +15,8 @@ import (
 
 func TestDefault(t *testing.T) {
 	pm := Default()
+	defer pm.Shutdown()
+
 	if !assert.Equal(t, DefaultMaxNum, pm.maxNum, "maxNum mismatching") {
 		return
 	}
@@ -63,6 +65,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 24*60*60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(45, -1, 230, "-2d")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -87,6 +90,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 24*60*60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(50, 30, 500, "2h")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -111,6 +115,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 2*60*60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(50, 30, 500, "-3h")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -135,6 +140,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 60*60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(83, 0, 450, "78m")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -159,6 +165,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 78*60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(83, 0, 450, "-98m")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -183,6 +190,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 60, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(59, 100, 763, "1583s")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -207,6 +215,7 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 1583, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 
 	pm, err = New(59, 100, 763, "-583s")
 	if !assert.NoError(t, err, `New should succeed`) {
@@ -231,4 +240,5 @@ func TestNew(t *testing.T) {
 	if !assert.Equal(t, 1, pm.seconds, "seconds mismatching") {
 		return
 	}
+	pm.Shutdown()
 }
