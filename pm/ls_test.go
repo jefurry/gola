@@ -29,7 +29,7 @@ func TestNewLState(t *testing.T) {
 		{77, "10s", 10, nil},
 	} {
 		ls, err = newLState(v.maxRequest, v.idleTimeout, v.seconds, v.whenNew)
-		if !assert.NoError(t, err, `newLState should succeed`) {
+		if !assert.NoError(t, err, "newLState should succeed") {
 			return
 		}
 		for i := 0; i < v.maxRequest; i++ {

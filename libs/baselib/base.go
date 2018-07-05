@@ -14,7 +14,7 @@ import (
 	"os"
 )
 
-func OpenBaseLib(L *lua.LState) {
+func Open(L *lua.LState) {
 	packagemod := L.GetGlobal(lua.LoadLibName).(*lua.LTable)
 	L.SetFuncs(packagemod, baseFuncs)
 }

@@ -16,7 +16,7 @@ import (
 
 func TestBaseLib(t *testing.T) {
 	L := lua.NewState()
-	OpenBaseLib(L)
+	Open(L)
 	defer L.Close()
 
 	code := `

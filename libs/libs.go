@@ -10,27 +10,11 @@ package libs
 
 import (
 	"github.com/jefurry/gola/libs/baselib"
-	//"github.com/jefurry/gola/libs/dilib"
+	"github.com/jefurry/gola/libs/dilib"
 	"github.com/yuin/gopher-lua"
 )
 
-type (
-	luaLib struct {
-		libName string
-		libFunc lua.LGFunction
-	}
-)
-
-var (
-	luaLibs = []luaLib{
-		//luaLib{dilib.DiLibName, dilib.Loader},
-	}
-)
-
 func OpenLibs(L *lua.LState) {
-	baselib.OpenBaseLib(L)
-
-	for _, lib := range luaLibs {
-		L.PreloadModule(lib.libName, lib.libFunc)
-	}
+	baselib.Open(L)
+	dilib.Open(L)
 }
