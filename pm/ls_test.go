@@ -21,7 +21,7 @@ func TestNewLState(t *testing.T) {
 		maxRequest  int
 		idleTimeout string
 		seconds     int
-		whenNew     newFunc
+		whenNew     NewFunc
 	}{
 		{20, "1d", 24 * 60 * 60, nil},
 		{100, "3h", 3600, nil},

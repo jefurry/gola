@@ -40,12 +40,12 @@ var (
 )
 
 type (
-	newFunc func(l *lua.LState) error
+	NewFunc func(l *lua.LState) error
 )
 
 type (
 	// lua state pool manager.
-	poolManager struct {
+	PoolManager struct {
 		// The maximum of processes lua state will start. This has been designed to control
 		// the global number of lua state when using a lot of pools.
 		// Use it with caution.
@@ -78,14 +78,16 @@ type (
 
 		mutex sync.Mutex
 
-		suppliedNum int
+		providedNum       int
+		servingNum        int
+		totalRequestedNum int
 
-		whenNew newFunc
+		whenNew NewFunc
 	}
 )
 
-func Default() *poolManager {
-	return &poolManager{
+func Default() *PoolManager {
+	return &PoolManager{
 		maxNum:      DefaultMaxNum,
 		startNum:    DefaultStartNum,
 		maxRequest:  DefaultMaxRequest,
@@ -94,7 +96,7 @@ func Default() *poolManager {
 	}
 }
 
-func New(maxNum, startNum, maxRequest int, idleTimeout string) (*poolManager, error) {
+func New(maxNum, startNum, maxRequest int, idleTimeout string) (*PoolManager, error) {
 	pm := Default()
 	pm.maxNum = getMaxNum(maxNum)
 	pm.startNum = getStartNum(pm.maxNum, startNum)
@@ -110,12 +112,12 @@ func New(maxNum, startNum, maxRequest int, idleTimeout string) (*poolManager, er
 }
 
 // Start start the lua state pool manager.
-func (pm *poolManager) Start(whenNew newFunc) error {
+func (pm *PoolManager) Start(whenNew NewFunc) error {
 	pm.whenNew = whenNew
-	pm.lss = make([]*lState, pm.maxNum)
+	pm.lss = make([]*lState, 0, pm.maxNum)
 
 	for i := 0; i < pm.startNum; i++ {
-		ls, err := pm.supply()
+		ls, err := pm.provide()
 		if err != nil {
 			pm.Shutdown()
 
@@ -129,54 +131,108 @@ func (pm *poolManager) Start(whenNew newFunc) error {
 }
 
 // Put put lua state into pool.
-func (pm *poolManager) Put(ls *lState) {
+func (pm *PoolManager) Put(ls *lState) {
 	pm.mutex.Lock()
 	defer pm.mutex.Unlock()
 
 	if ls.isExpire() {
-		pm.suppliedNum -= 1
-		ls.close()
+		pm.Close(ls)
 	} else {
+		if ls.isServing() {
+			pm.servingNum -= 1
+		}
+
+		ls.setServing(false)
 		pm.lss = append(pm.lss, ls)
 	}
 }
 
 // Get get lua state from pool.
-func (pm *poolManager) Get() (*lState, error) {
+func (pm *PoolManager) Get() (*lState, error) {
 	pm.mutex.Lock()
 	defer pm.mutex.Unlock()
 
 	n := len(pm.lss)
 	if n == 0 {
-		if pm.suppliedNum >= pm.maxNum {
+		if pm.providedNum >= pm.maxNum {
 			return nil, ErrLuaStatePoolFull
 		}
 
-		return pm.supply()
+		ls, err := pm.provide()
+		if err != nil {
+			return nil, err
+		}
+
+		ls.setServing(true)
+		ls.incRequestNum()
+		pm.servingNum += 1
+		pm.totalRequestedNum += 1
+
+		return ls, nil
+	} else {
+		ls := pm.lss[n-1]
+		pm.lss = pm.lss[0 : n-1]
+		ls.setServing(true)
+		ls.incRequestNum()
+		pm.servingNum += 1
+		pm.totalRequestedNum += 1
+
+		return ls, nil
 	}
-
-	ls := pm.lss[n-1]
-	pm.lss = pm.lss[0 : n-1]
-	ls.incRequestNum()
-
-	return ls, nil
 }
 
-func (pm *poolManager) Close(ls *lState) {
+func (pm *PoolManager) Size() int {
 	pm.mutex.Lock()
 	defer pm.mutex.Unlock()
 
-	ls.close()
-	pm.suppliedNum -= 1
+	return pm.providedNum
 }
 
-func (pm *poolManager) Shutdown() {
+func (pm *PoolManager) Cap() int {
+	return pm.maxNum
+}
+
+func (pm *PoolManager) ServingNum() int {
+	pm.mutex.Lock()
+	defer pm.mutex.Unlock()
+
+	return pm.servingNum
+}
+
+func (pm *PoolManager) TotalRequestedNum() int {
+	return pm.totalRequestedNum
+}
+
+// TODO: with context
+func (pm *PoolManager) Close(ls *lState) {
+	pm.mutex.Lock()
+	defer pm.mutex.Unlock()
+
+	if ls == nil {
+		return
+	}
+
+	if ls.isServing() {
+		pm.servingNum -= 1
+	}
+
+	ls.setServing(false)
+	pm.providedNum -= 1
+	ls.close()
+}
+
+// TODO: with context
+func (pm *PoolManager) Shutdown() {
 	for _, ls := range pm.lss {
 		pm.Close(ls)
 	}
+
+	pm.servingNum = 0
+	pm.providedNum = 0
+	pm.lss = nil
 }
 
-func (pm *poolManager) supply() (*lState, error) {
+func (pm *PoolManager) provide() (*lState, error) {
 	pm.mutex.Lock()
 	defer pm.mutex.Unlock()
 
@@ -185,7 +241,7 @@ func (pm *poolManager) supply() (*lState, error) {
 		return nil, err
 	}
 
-	pm.suppliedNum += 1
+	pm.providedNum += 1
 
 	return ls, nil
 }

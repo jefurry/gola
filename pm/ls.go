@@ -16,6 +16,7 @@ import (
 type (
 	lState struct {
 		L                  *lua.LState
+		serving            bool
 		requestedNum       int
 		startTime          int64
 		maxRequest         int
@@ -24,7 +25,7 @@ type (
 	}
 )
 
-func newLState(maxRequest int, idleTimeout string, seconds int, whenNew newFunc) (*lState, error) {
+func newLState(maxRequest int, idleTimeout string, seconds int, whenNew NewFunc) (*lState, error) {
 	l := lua.NewState()
 	if whenNew != nil {
 		if err := whenNew(l); err != nil {
@@ -36,6 +37,7 @@ func newLState(maxRequest int, idleTimeout string, seconds int, whenNew newFunc)
 
 	ls := &lState{
 		L:                  l,
+		serving:            false,
 		requestedNum:       0,
 		startTime:          time.Now().Unix(),
 		maxRequest:         maxRequest,
@@ -48,6 +50,14 @@ func newLState(maxRequest int, idleTimeout string, seconds int, whenNew newFunc)
 
 func (ls *lState) incRequestNum() {
 	ls.requestedNum += 1
+}
+
+func (ls *lState) setServing(isServing bool) {
+	ls.serving = isServing
+}
+
+func (ls *lState) isServing() bool {
+	return ls.serving
 }
 
 func (ls *lState) isExpire() bool {
