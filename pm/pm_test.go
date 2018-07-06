@@ -370,7 +370,6 @@ func TestNewLuaCode(t *testing.T) {
 		}
 
 		if !assert.Equal(t, 0, pm.ServingNum(), "ServingNum mismatching") {
-			close(ch)
 			return
 		}
 
