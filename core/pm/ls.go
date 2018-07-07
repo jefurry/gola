@@ -9,6 +9,7 @@
 package pm
 
 import (
+	"context"
 	"github.com/yuin/gopher-lua"
 	"time"
 )
@@ -16,16 +17,18 @@ import (
 type (
 	lState struct {
 		L                  *lua.LState
-		serving            bool
+		cancel             context.CancelFunc
 		requestedNum       int
 		startTime          int64
 		maxRequest         int
 		idleTimeout        string
 		idleTimeoutSeconds int
+		serving            bool
+		closed             bool
 	}
 )
 
-func newLState(maxRequest int, idleTimeout string, seconds int, whenNew NewFunc) (*lState, error) {
+func newLState(ctx context.Context, maxRequest int, idleTimeout string, seconds int, whenNew NewFunc) (*lState, error) {
 	l := lua.NewState()
 	if whenNew != nil {
 		if err := whenNew(l); err != nil {
@@ -35,9 +38,12 @@ func newLState(maxRequest int, idleTimeout string, seconds int, whenNew NewFunc)
 		}
 	}
 
+	lctx, cancel := context.WithCancel(ctx)
+	l.SetContext(lctx)
+
 	ls := &lState{
 		L:                  l,
-		serving:            false,
+		cancel:             cancel,
 		requestedNum:       0,
 		startTime:          time.Now().Unix(),
 		maxRequest:         maxRequest,
@@ -52,15 +58,7 @@ func (ls *lState) incRequestNum() {
 	ls.requestedNum += 1
 }
 
-func (ls *lState) setServing(isServing bool) {
-	ls.serving = isServing
-}
-
-func (ls *lState) isServing() bool {
-	return ls.serving
-}
-
-func (ls *lState) isExpire() bool {
+func (ls *lState) mustTerminate() bool {
 	if ls.maxRequest > 0 {
 		if ls.requestedNum >= ls.maxRequest {
 			return true
@@ -78,6 +76,13 @@ func (ls *lState) isExpire() bool {
 	return false
 }
 
+func (ls *lState) setServing(serving bool) {
+	ls.serving = serving
+}
+
 func (ls *lState) close() {
+	ls.closed = true
+	ls.setServing(false)
+	ls.cancel()
 	ls.L.Close()
 }

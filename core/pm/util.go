@@ -86,3 +86,11 @@ func getIdleTimeoutSeconds(n int, s string) int {
 
 	return n * multiple
 }
+
+func getRequestTerminateTimeout(rtt int) int {
+	if rtt < 0 {
+		return DefaultRequestTerminateTimeout
+	}
+
+	return rtt
+}
