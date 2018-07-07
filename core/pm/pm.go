@@ -135,7 +135,14 @@ func (pm *PoolManager) Load(ctx context.Context, reader io.Reader, name string) 
 
 	defer pm.put(ls)
 
-	return ls.L.Load(reader, name)
+	fn, err := ls.L.Load(reader, name)
+	if err != nil {
+		pm.Close(ls)
+
+		return nil, err
+	}
+
+	return fn, nil
 }
 
 func (pm *PoolManager) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
@@ -146,7 +153,14 @@ func (pm *PoolManager) LoadFile(ctx context.Context, path string) (*lua.LFunctio
 
 	defer pm.put(ls)
 
-	return ls.L.LoadFile(path)
+	fn, err := ls.L.LoadFile(path)
+	if err != nil {
+		pm.Close(ls)
+
+		return nil, err
+	}
+
+	return fn, nil
 }
 
 func (pm *PoolManager) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
@@ -157,7 +171,14 @@ func (pm *PoolManager) LoadString(ctx context.Context, source string) (*lua.LFun
 
 	defer pm.put(ls)
 
-	return ls.L.LoadString(source)
+	fn, err := ls.L.LoadString(source)
+	if err != nil {
+		pm.Close(ls)
+
+		return nil, err
+	}
+
+	return fn, nil
 }
 
 func (pm *PoolManager) DoFile(ctx context.Context, path string) error {
@@ -168,7 +189,13 @@ func (pm *PoolManager) DoFile(ctx context.Context, path string) error {
 
 	defer pm.put(ls)
 
-	return ls.L.DoFile(path)
+	if err := ls.L.DoFile(path); err != nil {
+		pm.Close(ls)
+
+		return err
+	}
+
+	return nil
 }
 
 func (pm *PoolManager) DoString(ctx context.Context, source string) error {
@@ -179,7 +206,13 @@ func (pm *PoolManager) DoString(ctx context.Context, source string) error {
 
 	defer pm.put(ls)
 
-	return ls.L.DoString(source)
+	if err := ls.L.DoString(source); err != nil {
+		pm.Close(ls)
+
+		return err
+	}
+
+	return nil
 }
 
 func (pm *PoolManager) Status() OpStatus {
