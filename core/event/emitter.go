@@ -50,7 +50,7 @@ func handlerPointer(handler Handler) uintptr {
 	return reflect.ValueOf(handler).Pointer()
 }
 
-func New() *Emitter {
+func NewEmitter() *Emitter {
 	return &Emitter{
 		maxListeners: DefaultMaxListeners,
 		listeners:    make(map[string][]*listener, 10),

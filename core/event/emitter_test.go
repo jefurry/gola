@@ -24,7 +24,7 @@ func TestEmitter_On(t *testing.T) {
 		return true
 	}
 
-	emit = New()
+	emit = NewEmitter()
 	emit.On(EventClientType, f1)
 
 	lis, ok = emit.listeners[EventClientType]
@@ -59,7 +59,7 @@ func TestEmitter_Once(t *testing.T) {
 		return true
 	}
 
-	emit = New()
+	emit = NewEmitter()
 	emit.Once(EventClientType, f1)
 
 	lis, ok = emit.listeners[EventClientType]
@@ -95,7 +95,7 @@ func TestEmitter_Off_1(t *testing.T) {
 		return true
 	}
 
-	emit = New()
+	emit = NewEmitter()
 	for i := 0; i < AddEventCount; i++ {
 		emit.On(EventClientType, f1)
 	}
@@ -136,7 +136,7 @@ func TestEmitter_Off_2(t *testing.T) {
 		return false
 	}
 
-	emit = New()
+	emit = NewEmitter()
 	emit.On(EventClientType, f1)
 	emit.On(EventClientType, f2)
 	emit.On(EventClientType, f2)
@@ -194,7 +194,7 @@ func TestEmitter_Off_3(t *testing.T) {
 		return false
 	}
 
-	emit = New()
+	emit = NewEmitter()
 	emit.On(EventClientType, f1)
 	emit.On(EventClientType, f2)
 	emit.On(EventClientType, f2)
