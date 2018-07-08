@@ -66,4 +66,15 @@ func TestConfig(t *testing.T) {
 	if !assert.Equal(t, 24*3600, c.seconds, "seconds mismatching") {
 		return
 	}
+
+	options := c.Options()
+	if !assert.Equal(t, false, options.SkipOpenLibs, "SkipOpenLibs should be false") {
+		return
+	}
+
+	options.SkipOpenLibs = true
+	c.SetOptions(options)
+	if !assert.Equal(t, true, options.SkipOpenLibs, "SkipOpenLibs should be false") {
+		return
+	}
 }

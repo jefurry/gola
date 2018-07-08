@@ -74,3 +74,11 @@ func NewConfig(maxNum, startNum, maxRequest, requestTerminateTimeout int, idleTi
 
 	return c, nil
 }
+
+func (c *Config) Options() lua.Options {
+	return c.options
+}
+
+func (c *Config) SetOptions(options lua.Options) {
+	c.options = options
+}
