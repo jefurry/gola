@@ -9,9 +9,9 @@
 package libs
 
 import (
-	"github.com/jefurry/gola/libs/baselib"
-	"github.com/jefurry/gola/libs/dilib"
-	"github.com/jefurry/gola/libs/eventlib"
+	"github.com/jefurry/gola/lua/libs/baselib"
+	"github.com/jefurry/gola/lua/libs/dilib"
+	"github.com/jefurry/gola/lua/libs/eventlib"
 	"github.com/yuin/gopher-lua"
 )
 

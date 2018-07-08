@@ -11,7 +11,7 @@ package pm
 import (
 	"context"
 	"fmt"
-	"github.com/jefurry/gola/libs"
+	"github.com/jefurry/gola/lua/libs"
 	"github.com/stretchr/testify/assert"
 	"github.com/yuin/gopher-lua"
 	"testing"
