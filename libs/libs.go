@@ -11,10 +11,12 @@ package libs
 import (
 	"github.com/jefurry/gola/libs/baselib"
 	"github.com/jefurry/gola/libs/dilib"
+	"github.com/jefurry/gola/libs/eventlib"
 	"github.com/yuin/gopher-lua"
 )
 
 func OpenLibs(L *lua.LState) {
 	baselib.Open(L)
 	dilib.Open(L)
+	eventlib.Open(L)
 }
