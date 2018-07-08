@@ -32,7 +32,7 @@ const (
 	DefaultMaxNum      = 0
 	DefaultStartNum    = 1
 	DefaultMaxRequest  = 0
-	DefaultIdleTimeout = string(defaultIdleTimeoutNum) + idleTimeoutHour
+	DefaultIdleTimeout = "1h"
 )
 
 const (
