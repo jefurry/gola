@@ -13,11 +13,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+	"github.com/yuin/gopher-lua"
 )
 
 func TestNewLState_1(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.TODO(), 1*time.Second)
-	ls, err := newLState(ctx, 1, "1h", 3600, nil)
+	ls, err := newLState(ctx, 1, "1h", 3600, lua.Options{}, nil)
 
 	if !assert.NoError(t, err, "newLState should succeed") {
 		return
@@ -44,7 +45,7 @@ func TestNewLState_1(t *testing.T) {
 
 func TestNewLState_2(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.TODO())
-	ls, err := newLState(ctx, 1, "1h", 3600, nil)
+	ls, err := newLState(ctx, 1, "1h", 3600, lua.Options{}, nil)
 
 	if !assert.NoError(t, err, "newLState should succeed") {
 		return
@@ -89,7 +90,7 @@ func TestNewLState(t *testing.T) {
 		{45, "1m", 60 * 60, nil},
 		{77, "10s", 10, nil},
 	} {
-		ls, err = newLState(ctx, v.maxRequest, v.idleTimeout, v.seconds, v.whenNew)
+		ls, err = newLState(ctx, v.maxRequest, v.idleTimeout, v.seconds, lua.Options{}, v.whenNew)
 		if !assert.NoError(t, err, "newLState should succeed") {
 			return
 		}

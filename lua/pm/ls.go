@@ -28,8 +28,8 @@ type (
 	}
 )
 
-func newLState(ctx context.Context, maxRequest int, idleTimeout string, seconds int, whenNew NewFunc) (*lState, error) {
-	l := lua.NewState()
+func newLState(ctx context.Context, maxRequest int, idleTimeout string, seconds int, options lua.Options, whenNew NewFunc) (*lState, error) {
+	l := lua.NewState(options)
 	if whenNew != nil {
 		if err := whenNew(l); err != nil {
 			l.Close()

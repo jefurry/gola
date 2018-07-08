@@ -401,7 +401,8 @@ func (pm *PoolManager) get(ctx context.Context) (*lState, error) {
 }
 
 func (pm *PoolManager) gen(ctx context.Context) (*lState, error) {
-	ls, err := newLState(ctx, pm.config.maxRequest, pm.config.idleTimeout, pm.config.seconds, pm.whenNew)
+	ls, err := newLState(ctx, pm.config.maxRequest, pm.config.idleTimeout,
+		pm.config.seconds, pm.config.options, pm.whenNew)
 	if err != nil {
 		return nil, err
 	}

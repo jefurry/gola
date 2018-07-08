@@ -9,7 +9,7 @@
 package baselib
 
 import (
-	"github.com/jefurry/gola/base"
+	"github.com/jefurry/gola/lua/base"
 	"github.com/yuin/gopher-lua"
 	"os"
 )
