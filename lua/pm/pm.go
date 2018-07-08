@@ -62,7 +62,7 @@ type (
 
 type (
 	// lua state pool manager.
-	PM struct {
+	LPM struct {
 		config *Config
 
 		opStatus OpStatus
@@ -81,7 +81,7 @@ type (
 	}
 )
 
-func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PM, error) {
+func newLPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*LPM, error) {
 	var c *Config
 	if config == nil {
 		c = &Config{
@@ -101,43 +101,43 @@ func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PM, error
 		whenNew = whenNews[0]
 	}
 
-	pm := &PM{
+	lpm := &LPM{
 		config:   c,
 		opStatus: OpReady,
 		whenNew:  whenNew,
 	}
 
-	err := pm.start(ctx)
+	err := lpm.start(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return pm, nil
+	return lpm, nil
 }
 
-func Default(ctx context.Context, whenNews ...NewFunc) (*PM, error) {
-	return newPM(ctx, nil, whenNews...)
+func Default(ctx context.Context, whenNews ...NewFunc) (*LPM, error) {
+	return newLPM(ctx, nil, whenNews...)
 }
 
-func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*PM, error) {
+func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*LPM, error) {
 	if config == nil {
 		return Default(ctx, whenNews...)
 	}
 
-	return newPM(ctx, config, whenNews...)
+	return newLPM(ctx, config, whenNews...)
 }
 
-func (pm *PM) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFunction, error) {
-	ls, err := pm.get(ctx)
+func (lpm *LPM) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFunction, error) {
+	ls, err := lpm.get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	defer pm.put(ls)
+	defer lpm.put(ls)
 
 	fn, err := ls.L.Load(reader, name)
 	if err != nil {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return nil, err
 	}
@@ -145,17 +145,17 @@ func (pm *PM) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFu
 	return fn, nil
 }
 
-func (pm *PM) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
-	ls, err := pm.get(ctx)
+func (lpm *LPM) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
+	ls, err := lpm.get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	defer pm.put(ls)
+	defer lpm.put(ls)
 
 	fn, err := ls.L.LoadFile(path)
 	if err != nil {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return nil, err
 	}
@@ -163,17 +163,17 @@ func (pm *PM) LoadFile(ctx context.Context, path string) (*lua.LFunction, error)
 	return fn, nil
 }
 
-func (pm *PM) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
-	ls, err := pm.get(ctx)
+func (lpm *LPM) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
+	ls, err := lpm.get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	defer pm.put(ls)
+	defer lpm.put(ls)
 
 	fn, err := ls.L.LoadString(source)
 	if err != nil {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return nil, err
 	}
@@ -181,16 +181,16 @@ func (pm *PM) LoadString(ctx context.Context, source string) (*lua.LFunction, er
 	return fn, nil
 }
 
-func (pm *PM) DoFile(ctx context.Context, path string) error {
-	ls, err := pm.get(ctx)
+func (lpm *LPM) DoFile(ctx context.Context, path string) error {
+	ls, err := lpm.get(ctx)
 	if err != nil {
 		return err
 	}
 
-	defer pm.put(ls)
+	defer lpm.put(ls)
 
 	if err := ls.L.DoFile(path); err != nil {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return err
 	}
@@ -198,16 +198,16 @@ func (pm *PM) DoFile(ctx context.Context, path string) error {
 	return nil
 }
 
-func (pm *PM) DoString(ctx context.Context, source string) error {
-	ls, err := pm.get(ctx)
+func (lpm *LPM) DoString(ctx context.Context, source string) error {
+	ls, err := lpm.get(ctx)
 	if err != nil {
 		return err
 	}
 
-	defer pm.put(ls)
+	defer lpm.put(ls)
 
 	if err := ls.L.DoString(source); err != nil {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return err
 	}
@@ -215,15 +215,15 @@ func (pm *PM) DoString(ctx context.Context, source string) error {
 	return nil
 }
 
-func (pm *PM) Status() OpStatus {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) Status() OpStatus {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	return pm.opStatus
+	return lpm.opStatus
 }
 
-func (pm *PM) StatusString() string {
-	opStatus := pm.Status()
+func (lpm *LPM) StatusString() string {
+	opStatus := lpm.Status()
 
 	if opStatus == OpReady {
 		return "Ready"
@@ -238,171 +238,171 @@ func (pm *PM) StatusString() string {
 	return "Unknown"
 }
 
-func (pm *PM) ServingNum() int {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) ServingNum() int {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	return pm.servingNum
+	return lpm.servingNum
 }
 
-func (pm *PM) TotalRequestedNum() int {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) TotalRequestedNum() int {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	return pm.totalRequestedNum
+	return lpm.totalRequestedNum
 }
 
-func (pm *PM) Len() int {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) Len() int {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	return pm.length
+	return lpm.length
 }
 
-func (pm *PM) Cap() int {
-	return pm.config.maxNum
+func (lpm *LPM) Cap() int {
+	return lpm.config.maxNum
 }
 
-func (pm *PM) Close(ls *lState) {
-	pm.lock.Lock()
-	pm.lock.Unlock()
+func (lpm *LPM) Close(ls *lState) {
+	lpm.lock.Lock()
+	lpm.lock.Unlock()
 
 	if !ls.serving {
 		panic("lua state not running")
 	}
 
-	pm.servingNum -= 1
+	lpm.servingNum -= 1
 
-	if pm.servingNum <= 0 {
-		pm.cond.Signal()
+	if lpm.servingNum <= 0 {
+		lpm.cond.Signal()
 	}
 
-	pm.length -= 1
+	lpm.length -= 1
 	ls.close()
 }
 
-func (pm *PM) Shutdown() {
-	pm.readyExit()
-	pm.exit()
+func (lpm *LPM) Shutdown() {
+	lpm.readyExit()
+	lpm.exit()
 
-	pm.length = 0
-	pm.servingNum = 0
-	pm.lss = nil
+	lpm.length = 0
+	lpm.servingNum = 0
+	lpm.lss = nil
 }
 
-func (pm *PM) Restart(ctx context.Context) error {
-	pm.Shutdown()
+func (lpm *LPM) Restart(ctx context.Context) error {
+	lpm.Shutdown()
 
-	if err := pm.start(ctx); err != nil {
+	if err := lpm.start(ctx); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (pm *PM) start(ctx context.Context) error {
-	pm.lss = make([]*lState, 0, pm.config.maxNum)
-	pm.lock = new(sync.Mutex)
-	pm.cond = sync.NewCond(pm.lock)
+func (lpm *LPM) start(ctx context.Context) error {
+	lpm.lss = make([]*lState, 0, lpm.config.maxNum)
+	lpm.lock = new(sync.Mutex)
+	lpm.cond = sync.NewCond(lpm.lock)
 
-	for i := 0; i < pm.config.startNum; i++ {
-		ls, err := pm.gen(ctx)
+	for i := 0; i < lpm.config.startNum; i++ {
+		ls, err := lpm.gen(ctx)
 		if err != nil {
-			pm.Shutdown()
+			lpm.Shutdown()
 
 			return err
 		}
 
-		pm.length += 1
+		lpm.length += 1
 		ls.setServing(false)
-		pm.put(ls)
+		lpm.put(ls)
 	}
 
-	pm.opStatus = OpRunning
+	lpm.opStatus = OpRunning
 
 	return nil
 }
 
 // put put lua state into pool.
-func (pm *PM) put(ls *lState) error {
+func (lpm *LPM) put(ls *lState) error {
 	if ls.closed {
 		return ErrLSClosed
 	}
 
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	if pm.opStatus == OpExiting {
-		pm.Close(ls)
+	if lpm.opStatus == OpExiting {
+		lpm.Close(ls)
 
 		return ErrLSPExiting
 	}
 
-	if pm.opStatus == OpDead {
-		pm.Close(ls)
+	if lpm.opStatus == OpDead {
+		lpm.Close(ls)
 
 		return ErrLSPDead
 	}
 
 	if ls.mustTerminate() {
-		pm.Close(ls)
+		lpm.Close(ls)
 
 		return nil
 	}
 
 	if ls.serving {
-		pm.servingNum -= 1
+		lpm.servingNum -= 1
 	}
 
 	ls.setServing(false)
 
-	pm.lss = append(pm.lss, ls)
+	lpm.lss = append(lpm.lss, ls)
 
 	return nil
 }
 
-func (pm *PM) get(ctx context.Context) (*lState, error) {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) get(ctx context.Context) (*lState, error) {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	if pm.opStatus == OpExiting {
+	if lpm.opStatus == OpExiting {
 		return nil, ErrLSPExiting
 	}
 
-	if pm.opStatus == OpDead {
+	if lpm.opStatus == OpDead {
 		return nil, ErrLSPDead
 	}
 
 	var ls *lState
-	n := len(pm.lss)
+	n := len(lpm.lss)
 	if n == 0 {
-		if pm.config.maxNum != 0 && pm.length >= pm.config.maxNum {
+		if lpm.config.maxNum != 0 && lpm.length >= lpm.config.maxNum {
 			return nil, ErrLSPFulled
 		}
 
-		lstate, err := pm.gen(ctx)
+		lstate, err := lpm.gen(ctx)
 		if err != nil {
 			return nil, err
 		}
 
-		pm.length += 1
+		lpm.length += 1
 		ls = lstate
 	} else {
-		ls = pm.lss[n-1]
-		pm.lss = pm.lss[0 : n-1]
+		ls = lpm.lss[n-1]
+		lpm.lss = lpm.lss[0 : n-1]
 	}
 
 	ls.setServing(true)
-	pm.servingNum += 1
-	pm.totalRequestedNum += 1
+	lpm.servingNum += 1
+	lpm.totalRequestedNum += 1
 	ls.incRequestNum()
 
 	return ls, nil
 }
 
-func (pm *PM) gen(ctx context.Context) (*lState, error) {
-	ls, err := newLState(ctx, pm.config.maxRequest, pm.config.idleTimeout,
-		pm.config.seconds, pm.config.options, pm.whenNew)
+func (lpm *LPM) gen(ctx context.Context) (*lState, error) {
+	ls, err := newLState(ctx, lpm.config.maxRequest, lpm.config.idleTimeout,
+		lpm.config.seconds, lpm.config.options, lpm.whenNew)
 	if err != nil {
 		return nil, err
 	}
@@ -410,22 +410,22 @@ func (pm *PM) gen(ctx context.Context) (*lState, error) {
 	return ls, nil
 }
 
-func (pm *PM) readyExit() {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) readyExit() {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	pm.opStatus = OpExiting
+	lpm.opStatus = OpExiting
 }
 
-func (pm *PM) exit() {
-	pm.lock.Lock()
-	defer pm.lock.Unlock()
+func (lpm *LPM) exit() {
+	lpm.lock.Lock()
+	defer lpm.lock.Unlock()
 
-	for pm.servingNum > 0 {
-		pm.cond.Wait()
+	for lpm.servingNum > 0 {
+		lpm.cond.Wait()
 	}
 
-	for _, ls := range pm.lss {
+	for _, ls := range lpm.lss {
 		ls.close()
 	}
 }

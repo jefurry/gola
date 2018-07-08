@@ -20,45 +20,45 @@ import (
 
 func TestDefault(t *testing.T) {
 	ctx, _ := context.WithCancel(context.TODO())
-	pm, err := Default(ctx)
+	lpm, err := Default(ctx)
 	if !assert.NoError(t, err, "Start should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultStartNum, pm.Len(), "length mismatching") {
+	if !assert.Equal(t, DefaultStartNum, lpm.Len(), "length mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultMaxNum, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, DefaultMaxNum, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultStartNum, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, DefaultStartNum, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultMaxRequest, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, DefaultMaxRequest, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultIdleTimeout, pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, DefaultIdleTimeout, lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 3600, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 3600, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
 
-	ls1, err := pm.get(ctx)
+	ls1, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, DefaultStartNum, pm.Len(), "lenth mismatching") {
+	if !assert.Equal(t, DefaultStartNum, lpm.Len(), "lenth mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.ServingNum(), "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.ServingNum(), "servingNum mismatching") {
 		return
 	}
 
@@ -66,151 +66,151 @@ func TestDefault(t *testing.T) {
 		return
 	}
 
-	ls2, err := pm.get(ctx)
+	ls2, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.TotalRequestedNum(), "length mismatching") {
+	if !assert.Equal(t, 2, lpm.TotalRequestedNum(), "length mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.ServingNum(), "servingNum mismatching") {
+	if !assert.Equal(t, 2, lpm.ServingNum(), "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.Len(), "requestedNum mismatching") {
+	if !assert.Equal(t, 2, lpm.Len(), "requestedNum mismatching") {
 		return
 	}
 
-	pm.put(ls2)
-	go pm.Shutdown()
-	go pm.Close(ls1)
+	lpm.put(ls2)
+	go lpm.Shutdown()
+	go lpm.Close(ls1)
 
 	<-time.After(3 * time.Second)
 
-	if !assert.Equal(t, 0, pm.ServingNum(), "servingNum mismatching") {
+	if !assert.Equal(t, 0, lpm.ServingNum(), "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.Len(), "requestedNum mismatching") {
+	if !assert.Equal(t, 0, lpm.Len(), "requestedNum mismatching") {
 		return
 	}
 }
 
 func TestServingNumWithDefault(t *testing.T) {
 	ctx, _ := context.WithCancel(context.TODO())
-	pm, err := Default(ctx)
+	lpm, err := Default(ctx)
 	if !assert.NoError(t, err, "Default should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 0, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.length, "length mismatching") {
+	if !assert.Equal(t, 1, lpm.length, "length mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.Cap(), "Cap mismatching") {
+	if !assert.Equal(t, 0, lpm.Cap(), "Cap mismatching") {
 		return
 	}
 
-	ls1, err := pm.get(ctx)
+	ls1, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.length, "length mismatching") {
+	if !assert.Equal(t, 1, lpm.length, "length mismatching") {
 		return
 	}
 
-	ls2, err := pm.get(ctx)
+	ls2, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 2, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.length, "length mismatching") {
+	if !assert.Equal(t, 2, lpm.length, "length mismatching") {
 		return
 	}
 
-	err = pm.put(ls1)
+	err = lpm.put(ls1)
 	if !assert.NoError(t, err, "put should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.length, "length mismatching") {
+	if !assert.Equal(t, 2, lpm.length, "length mismatching") {
 		return
 	}
 
-	ls3, err := pm.get(ctx)
+	ls3, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 2, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.length, "length mismatching") {
+	if !assert.Equal(t, 2, lpm.length, "length mismatching") {
 		return
 	}
 
-	pm.Close(ls2)
-	err = pm.put(ls2)
+	lpm.Close(ls2)
+	err = lpm.put(ls2)
 	if !assert.Error(t, err, "put should be not succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.length, "length mismatching") {
+	if !assert.Equal(t, 1, lpm.length, "length mismatching") {
 		return
 	}
 
-	ls4, err := pm.get(ctx)
+	ls4, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 2, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.length, "length mismatching") {
+	if !assert.Equal(t, 2, lpm.length, "length mismatching") {
 		return
 	}
 
-	err = pm.put(ls3)
+	err = lpm.put(ls3)
 	if !assert.NoError(t, err, "put should be not succeed") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2, pm.length, "length mismatching") {
+	if !assert.Equal(t, 2, lpm.length, "length mismatching") {
 		return
 	}
 
-	go pm.Shutdown()
-	go pm.Close(ls4)
+	go lpm.Shutdown()
+	go lpm.Close(ls4)
 
 	<-time.After(3 * time.Second)
 
@@ -230,11 +230,11 @@ func TestServingNumWithDefault(t *testing.T) {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 0, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.length, "length mismatching") {
+	if !assert.Equal(t, 0, lpm.length, "length mismatching") {
 		return
 	}
 }
@@ -246,17 +246,17 @@ func TestNew_1(t *testing.T) {
 	}
 
 	ctx, _ := context.WithCancel(context.TODO())
-	pm, err := New(ctx, config)
+	lpm, err := New(ctx, config)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	ls1, err := pm.get(ctx)
+	ls1, err := lpm.get(ctx)
 	if !assert.NoError(t, err, "get should succeed") {
 		return
 	}
 
-	ls2, err := pm.get(ctx)
+	ls2, err := lpm.get(ctx)
 	if !assert.Equal(t, "lua state pool fulled", err.Error(), "get should failed") {
 		return
 	}
@@ -265,32 +265,32 @@ func TestNew_1(t *testing.T) {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 1, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.Len(), "length mismatching") {
+	if !assert.Equal(t, 1, lpm.Len(), "length mismatching") {
 		return
 	}
 
-	fmt.Println(pm.servingNum, pm.Len())
+	fmt.Println(lpm.servingNum, lpm.Len())
 
-	go pm.Shutdown()
-	go pm.Close(ls1)
+	go lpm.Shutdown()
+	go lpm.Close(ls1)
 
 	<-time.After(3 * time.Second)
 
-	if !assert.Equal(t, 0, pm.servingNum, "servingNum mismatching") {
+	if !assert.Equal(t, 0, lpm.servingNum, "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.Len(), "length mismatching") {
+	if !assert.Equal(t, 0, lpm.Len(), "length mismatching") {
 		return
 	}
 }
 
 func TestNew_2(t *testing.T) {
-	var pm *PM
+	var lpm *LPM
 	var err error
 
 	config1, err := NewConfig(45, -1, 230, 120, "1d")
@@ -299,31 +299,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx1, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx1, config1)
+	lpm, err = New(ctx1, config1)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 45, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 45, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 23, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 23, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 230, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 230, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1d", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1d", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 24*60*60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 24*60*60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config2, err := NewConfig(45, -1, 230, 120, "-2d")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -331,31 +331,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx2, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx2, config2)
+	lpm, err = New(ctx2, config2)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 45, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 45, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 23, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 23, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 230, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 230, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1d", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1d", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 24*60*60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 24*60*60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config3, err := NewConfig(50, 30, 500, 120, "2h")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -363,31 +363,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx3, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx3, config3)
+	lpm, err = New(ctx3, config3)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 50, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 50, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 30, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 30, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 500, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 500, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "2h", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "2h", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 2*60*60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 2*60*60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config4, err := NewConfig(50, 30, 500, 120, "-3h")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -395,31 +395,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx4, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx4, config4)
+	lpm, err = New(ctx4, config4)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 50, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 50, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 30, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 30, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 500, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 500, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1h", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1h", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 60*60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 60*60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config5, err := NewConfig(83, 0, 450, 120, "78m")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -427,31 +427,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx5, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx5, config5)
+	lpm, err = New(ctx5, config5)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 83, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 83, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 42, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 42, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 450, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 450, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "78m", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "78m", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 78*60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 78*60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config6, err := NewConfig(83, 0, 450, 120, "-98m")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -459,31 +459,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx6, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx6, config6)
+	lpm, err = New(ctx6, config6)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 83, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 83, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 42, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 42, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 450, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 450, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1m", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1m", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 60, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 60, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config7, err := NewConfig(59, 100, 763, 120, "1583s")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -491,31 +491,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx7, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx7, config7)
+	lpm, err = New(ctx7, config7)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 59, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 59, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 30, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 30, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 763, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 763, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1583s", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1583s", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1583, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 1583, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 
 	config8, err := NewConfig(59, 100, 763, 120, "-583s")
 	if !assert.NoError(t, err, "NewConfig should succeed") {
@@ -523,31 +523,31 @@ func TestNew_2(t *testing.T) {
 	}
 
 	ctx8, _ := context.WithCancel(context.TODO())
-	pm, err = New(ctx8, config8)
+	lpm, err = New(ctx8, config8)
 	if !assert.NoError(t, err, `New should succeed`) {
 		return
 	}
 
-	if !assert.Equal(t, 59, pm.config.maxNum, "maxNum mismatching") {
+	if !assert.Equal(t, 59, lpm.config.maxNum, "maxNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 30, pm.config.startNum, "startNum mismatching") {
+	if !assert.Equal(t, 30, lpm.config.startNum, "startNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 763, pm.config.maxRequest, "maxRequest mismatching") {
+	if !assert.Equal(t, 763, lpm.config.maxRequest, "maxRequest mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, "1s", pm.config.idleTimeout, "idleTimeout mismatching") {
+	if !assert.Equal(t, "1s", lpm.config.idleTimeout, "idleTimeout mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 1, pm.config.seconds, "seconds mismatching") {
+	if !assert.Equal(t, 1, lpm.config.seconds, "seconds mismatching") {
 		return
 	}
-	pm.Shutdown()
+	lpm.Shutdown()
 }
 
 func TestNewLuaCode(t *testing.T) {
@@ -557,7 +557,7 @@ func TestNewLuaCode(t *testing.T) {
 	}
 
 	ctx, _ := context.WithCancel(context.TODO())
-	pm, err := New(ctx, config, func(L *lua.LState) error {
+	lpm, err := New(ctx, config, func(L *lua.LState) error {
 		libs.OpenLibs(L)
 
 		return nil
@@ -567,23 +567,23 @@ func TestNewLuaCode(t *testing.T) {
 		return
 	}
 
-	defer pm.Shutdown()
+	defer lpm.Shutdown()
 
-	if !assert.Equal(t, 23, pm.Len(), "length mismatching") {
+	if !assert.Equal(t, 23, lpm.Len(), "length mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.ServingNum(), "servingNum mismatching") {
+	if !assert.Equal(t, 0, lpm.ServingNum(), "servingNum mismatching") {
 		return
 	}
 
-	if !assert.Equal(t, 0, pm.TotalRequestedNum(), "totalRequestedNum mismatching") {
+	if !assert.Equal(t, 0, lpm.TotalRequestedNum(), "totalRequestedNum mismatching") {
 		return
 	}
 
 	ch := make(chan bool, 0)
 	go func() {
-		ls, err := pm.get(ctx)
+		ls, err := lpm.get(ctx)
 		if !assert.NoError(t, err, "get should succeed") {
 			close(ch)
 			return
@@ -621,12 +621,12 @@ func TestNewLuaCode(t *testing.T) {
 			return
 		}
 
-		if !assert.Equal(t, 1, pm.ServingNum(), "servingNum mismatching") {
+		if !assert.Equal(t, 1, lpm.ServingNum(), "servingNum mismatching") {
 			close(ch)
 			return
 		}
 
-		pm.put(ls)
+		lpm.put(ls)
 
 		ch <- true
 	}()
@@ -636,7 +636,7 @@ func TestNewLuaCode(t *testing.T) {
 			return
 		}
 
-		if !assert.Equal(t, 0, pm.ServingNum(), "ServingNum mismatching") {
+		if !assert.Equal(t, 0, lpm.ServingNum(), "ServingNum mismatching") {
 			return
 		}
 
