@@ -76,11 +76,10 @@ func (emit *Emitter) SetMaxListeners(n int) {
 func (emit *Emitter) On(etype string, handler Handler, priority ...int) {
 	pri := DefaultPriority
 	if len(priority) > 0 {
-		if priority[0] < 0 {
+		pri := priority[0]
+		if pri < 0 {
 			panic("priority must be a number")
 		}
-
-		pri = priority[0]
 	}
 
 	li := newListener(pri, handler)
