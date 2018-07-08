@@ -50,9 +50,14 @@ func handlerPointer(handler Handler) uintptr {
 	return reflect.ValueOf(handler).Pointer()
 }
 
-func NewEmitter() *Emitter {
+func NewEmitter(maxListeners ...int) *Emitter {
+	ml := DefaultMaxListeners
+	if len(maxListeners) > 0 {
+		ml = maxListeners[0]
+	}
+
 	return &Emitter{
-		maxListeners: DefaultMaxListeners,
+		maxListeners: ml,
 		listeners:    make(map[string][]*listener, 10),
 	}
 }
