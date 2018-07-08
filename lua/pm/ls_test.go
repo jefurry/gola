@@ -11,9 +11,9 @@ package pm
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"github.com/yuin/gopher-lua"
 	"testing"
 	"time"
-	"github.com/yuin/gopher-lua"
 )
 
 func TestNewLState_1(t *testing.T) {
