@@ -215,6 +215,10 @@ func (lpm *LPM) DoString(ctx context.Context, source string) error {
 	return nil
 }
 
+func (lpm *LPM) Config() *Config {
+	return lpm.config
+}
+
 func (lpm *LPM) Status() OpStatus {
 	lpm.lock.Lock()
 	defer lpm.lock.Unlock()
