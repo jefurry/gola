@@ -1,0 +1,6 @@
+*.swp
+*.log
+*.tmp
+*.bak
+
+vendor/
