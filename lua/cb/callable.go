@@ -15,7 +15,7 @@ import (
 )
 
 type (
-	Callable               []lua.LValue
+	Callable                 []lua.LValue
 	errInvalidCallableString struct {
 		s string
 	}
