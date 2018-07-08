@@ -12,6 +12,7 @@ package dilib
 import (
 	"fmt"
 	"github.com/emirpasic/gods/lists/arraylist"
+	"github.com/jefurry/gola/lua/cb"
 	"github.com/pkg/errors"
 	"github.com/yuin/gopher-lua"
 )
@@ -141,14 +142,14 @@ func (dii *diInjector) fnDef(L *lua.LState, self lua.LValue, fn *lua.LFunction,
 		}
 	} else {
 		inj, err := claim(L, val)
-		if err != nil && err == errInvalidCallable {
+		if err != nil && err == cb.ErrInvalidCallable {
 			return nil, err
 		}
 
 		inject = inj
 		if inject == nil {
 			inj, err := parse(L, val)
-			if err != nil && err == errInvalidCallable {
+			if err != nil && err == cb.ErrInvalidCallable {
 				return nil, err
 			}
 
@@ -276,7 +277,7 @@ func (dii *diInjector) invoke(L *lua.LState, val lua.LValue,
 		return lua.LNil, errors.Errorf("%s or %s expected, got %s", lua.LTFunction, lua.LTTable, typ)
 	}
 
-	var callable *diCallable
+	var callable *cb.Callable
 	var inject *lua.LTable = nil
 	if typ == lua.LTTable {
 		tb, ok := val.(*lua.LTable)
@@ -289,7 +290,7 @@ func (dii *diInjector) invoke(L *lua.LState, val lua.LValue,
 		tb.Remove(size)
 		inject = tb
 
-		ca, err := newDiCallable(L, cc)
+		ca, err := cb.New(L, cc)
 		if err != nil {
 			return lua.LNil, err
 		}
@@ -301,7 +302,7 @@ func (dii *diInjector) invoke(L *lua.LState, val lua.LValue,
 			return lua.LNil, errors.Errorf("%s expected, got %s", lua.LTFunction, typ)
 		}
 
-		ca, err := newDiCallable(L, fn)
+		ca, err := cb.New(L, fn)
 		if err != nil {
 			return lua.LNil, err
 		}
@@ -309,8 +310,8 @@ func (dii *diInjector) invoke(L *lua.LState, val lua.LValue,
 		callable = ca
 	}
 
-	o := callable.getRef()
-	fn, err := callable.getObjFn(L)
+	o := callable.Ref()
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return lua.LNil, err
 	}

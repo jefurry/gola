@@ -40,7 +40,7 @@ func TestAnnotate_1(t *testing.T) {
 		return
 	}
 
-	f, err := callable.getObjFn(L)
+	f, err := callable.ObjFn(L)
 	if !assert.NoError(t, err, "getObjFn should succeed") {
 		return
 	}
@@ -79,7 +79,7 @@ func TestAnnotate_2(t *testing.T) {
 		return
 	}
 
-	fun, err := callable.getObjFn(L)
+	fun, err := callable.ObjFn(L)
 	if !assert.NoError(t, err, "getObjFn should succeed") {
 		return
 	}
@@ -227,7 +227,7 @@ func TestAnnotate_3(t *testing.T) {
 		return
 	}
 
-	fun, err := callable.getObjFn(L)
+	fun, err := callable.ObjFn(L)
 	if !assert.NoError(t, err, "getObjFn should succeed") {
 		return
 	}
@@ -371,7 +371,7 @@ func TestAnnotate_4(t *testing.T) {
 		return
 	}
 
-	fun, err := callable.getObjFn(L)
+	fun, err := callable.ObjFn(L)
 	if !assert.NoError(t, err, "getObjFn should succeed") {
 		return
 	}

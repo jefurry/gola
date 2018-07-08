@@ -9,6 +9,7 @@
 package dilib
 
 import (
+	"github.com/jefurry/gola/lua/cb"
 	"github.com/pkg/errors"
 	"github.com/yuin/gopher-lua"
 )
@@ -31,12 +32,12 @@ func diParse(L *lua.LState) int {
 }
 
 func parse(L *lua.LState, val lua.LValue) (*lua.LTable, error) {
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		return nil, err
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return nil, err
 	}

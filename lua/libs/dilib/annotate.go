@@ -9,6 +9,7 @@
 package dilib
 
 import (
+	"github.com/jefurry/gola/lua/cb"
 	"github.com/pkg/errors"
 	"github.com/yuin/gopher-lua"
 )
@@ -41,7 +42,7 @@ func diAnnotate(L *lua.LState) int {
 		return 2
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		L.Push(lua.LFalse)
 		L.Push(lua.LString(err.Error()))
@@ -79,7 +80,7 @@ func diClaim(L *lua.LState) int {
 	val := L.CheckAny(1)
 
 	inject, err := claim(L, val)
-	if err != nil && err == errInvalidCallable {
+	if err != nil && err == cb.ErrInvalidCallable {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
 
@@ -112,7 +113,7 @@ func diDissoc(L *lua.LState) int {
 	return 1
 }
 
-func annotate(L *lua.LState, inject *lua.LTable) (*diCallable, *lua.LTable, error) {
+func annotate(L *lua.LState, inject *lua.LTable) (*cb.Callable, *lua.LTable, error) {
 	if inject == nil {
 		return nil, nil, errors.New("attempt to index a non-table")
 	}
@@ -122,7 +123,7 @@ func annotate(L *lua.LState, inject *lua.LTable) (*diCallable, *lua.LTable, erro
 		return nil, nil, errors.New("attempt to index a non-table")
 	}
 
-	callable, err := newDiCallable(L, inject.RawGetInt(size))
+	callable, err := cb.New(L, inject.RawGetInt(size))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -133,12 +134,12 @@ func annotate(L *lua.LState, inject *lua.LTable) (*diCallable, *lua.LTable, erro
 }
 
 func assoc(L *lua.LState, val lua.LValue, inject *lua.LTable) error {
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		return err
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return err
 	}
@@ -155,12 +156,12 @@ func assoc(L *lua.LState, val lua.LValue, inject *lua.LTable) error {
 }
 
 func claim(L *lua.LState, val lua.LValue) (*lua.LTable, error) {
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		return nil, err
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return nil, err
 	}
@@ -189,12 +190,12 @@ func claim(L *lua.LState, val lua.LValue) (*lua.LTable, error) {
 }
 
 func dissoc(L *lua.LState, val lua.LValue) error {
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		return err
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return err
 	}

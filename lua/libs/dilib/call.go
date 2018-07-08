@@ -9,6 +9,7 @@
 package dilib
 
 import (
+	"github.com/jefurry/gola/lua/cb"
 	"github.com/yuin/gopher-lua"
 )
 
@@ -69,7 +70,7 @@ func diBind(L *lua.LState) int {
 	val := L.CheckAny(2) // callable
 	tb := L.OptTable(3, nil)
 
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
@@ -77,7 +78,7 @@ func diBind(L *lua.LState) int {
 		return 2
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
@@ -96,7 +97,7 @@ func diBind(L *lua.LState) int {
 	}
 
 	if obj == lua.LNil {
-		obj = callable.getRef()
+		obj = callable.Ref()
 	}
 
 	L.Push(fn)
@@ -116,18 +117,18 @@ func diBind(L *lua.LState) int {
 }
 
 func call(L *lua.LState, val lua.LValue, args ...lua.LValue) (lua.LValue, error) {
-	callable, err := newDiCallable(L, val)
+	callable, err := cb.New(L, val)
 	if err != nil {
 		return lua.LNil, err
 	}
 
-	fn, err := callable.getObjFn(L)
+	fn, err := callable.ObjFn(L)
 	if err != nil {
 		return lua.LNil, err
 	}
 
 	n := len(args)
-	ref := callable.getRef()
+	ref := callable.Ref()
 
 	L.Push(fn)
 	if ref != lua.LNil {
