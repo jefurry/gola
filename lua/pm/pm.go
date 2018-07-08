@@ -61,6 +61,9 @@ type (
 )
 
 type (
+	DoHandler   func(*lua.LState) (lua.LValue, error)
+	LoadHandler func(*lua.LState, *lua.LFunction) (lua.LValue, error)
+
 	// lua state pool manager.
 	LPM struct {
 		config *Config
@@ -127,10 +130,10 @@ func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*LPM, error)
 	return newLPM(ctx, config, whenNews...)
 }
 
-func (lpm *LPM) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFunction, error) {
+func (lpm *LPM) Load(ctx context.Context, reader io.Reader, name string, handlers ...LoadHandler) (lua.LValue, error) {
 	ls, err := lpm.get(ctx)
 	if err != nil {
-		return nil, err
+		return lua.LNil, err
 	}
 
 	defer lpm.put(ls)
@@ -139,16 +142,22 @@ func (lpm *LPM) Load(ctx context.Context, reader io.Reader, name string) (*lua.L
 	if err != nil {
 		lpm.Close(ls)
 
-		return nil, err
+		return lua.LNil, err
+	}
+
+	if len(handlers) > 0 {
+		handler := handlers[0]
+
+		return handler(ls.L, fn)
 	}
 
 	return fn, nil
 }
 
-func (lpm *LPM) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
+func (lpm *LPM) LoadFile(ctx context.Context, path string, handlers ...LoadHandler) (lua.LValue, error) {
 	ls, err := lpm.get(ctx)
 	if err != nil {
-		return nil, err
+		return lua.LNil, err
 	}
 
 	defer lpm.put(ls)
@@ -157,16 +166,22 @@ func (lpm *LPM) LoadFile(ctx context.Context, path string) (*lua.LFunction, erro
 	if err != nil {
 		lpm.Close(ls)
 
-		return nil, err
+		return lua.LNil, err
+	}
+
+	if len(handlers) > 0 {
+		handler := handlers[0]
+
+		return handler(ls.L, fn)
 	}
 
 	return fn, nil
 }
 
-func (lpm *LPM) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
+func (lpm *LPM) LoadString(ctx context.Context, source string, handlers ...LoadHandler) (lua.LValue, error) {
 	ls, err := lpm.get(ctx)
 	if err != nil {
-		return nil, err
+		return lua.LNil, err
 	}
 
 	defer lpm.put(ls)
@@ -175,16 +190,22 @@ func (lpm *LPM) LoadString(ctx context.Context, source string) (*lua.LFunction, 
 	if err != nil {
 		lpm.Close(ls)
 
-		return nil, err
+		return lua.LNil, err
+	}
+
+	if len(handlers) > 0 {
+		handler := handlers[0]
+
+		return handler(ls.L, fn)
 	}
 
 	return fn, nil
 }
 
-func (lpm *LPM) DoFile(ctx context.Context, path string) error {
+func (lpm *LPM) DoFile(ctx context.Context, path string, handlers ...DoHandler) (lua.LValue, error) {
 	ls, err := lpm.get(ctx)
 	if err != nil {
-		return err
+		return lua.LNil, err
 	}
 
 	defer lpm.put(ls)
@@ -192,16 +213,22 @@ func (lpm *LPM) DoFile(ctx context.Context, path string) error {
 	if err := ls.L.DoFile(path); err != nil {
 		lpm.Close(ls)
 
-		return err
+		return lua.LNil, err
 	}
 
-	return nil
+	if len(handlers) > 0 {
+		handler := handlers[0]
+
+		return handler(ls.L)
+	}
+
+	return lua.LNil, nil
 }
 
-func (lpm *LPM) DoString(ctx context.Context, source string) error {
+func (lpm *LPM) DoString(ctx context.Context, source string, handlers ...DoHandler) (lua.LValue, error) {
 	ls, err := lpm.get(ctx)
 	if err != nil {
-		return err
+		return lua.LNil, err
 	}
 
 	defer lpm.put(ls)
@@ -209,10 +236,16 @@ func (lpm *LPM) DoString(ctx context.Context, source string) error {
 	if err := ls.L.DoString(source); err != nil {
 		lpm.Close(ls)
 
-		return err
+		return lua.LNil, err
 	}
 
-	return nil
+	if len(handlers) > 0 {
+		handler := handlers[0]
+
+		return handler(ls.L)
+	}
+
+	return lua.LNil, nil
 }
 
 func (lpm *LPM) Config() *Config {
