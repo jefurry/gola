@@ -120,9 +120,8 @@ func (emit *Emitter) Once(etype string, handler Handler, priority ...int) {
 	var wrapppedFunc Handler
 	wrapppedFunc = func(evt *Event) bool {
 		emit.Off(etype, wrapppedFunc)
-		handler(evt)
-
-		return true
+		
+		return handler(evt)
 	}
 
 	emit.On(etype, wrapppedFunc, priority...)
