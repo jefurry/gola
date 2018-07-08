@@ -1,5 +1,5 @@
-hash: 184011a23bd27bb4637851ebbc674cef493e5bf521446905ed03ff01a767cf6d
-updated: 2018-07-02T05:21:13.696787929+08:00
+hash: 3668bb1dd5ce06333a2dd1847ff5f2fedde2b1330edee9d9fc76203f38292b21
+updated: 2018-07-09T00:54:38.381424847+08:00
 imports:
 - name: github.com/emirpasic/gods
   version: bba54c718c4e39e4db35f73e0c660df44a4de4cd
@@ -8,10 +8,14 @@ imports:
   - lists
   - lists/arraylist
   - utils
+- name: github.com/jefurry/logrus
+  version: a16bb92fea54421f9a8c4581414a029802122752
 - name: github.com/mitchellh/go-homedir
   version: 3864e76763d94a6df2f9960b16a20a33da9f9a66
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/robertkrimen/otto
+  version: 15f95af6e78dcd2030d8195a138bd88d4f403546
 - name: github.com/yuin/gopher-lua
   version: 46796da1b0b4794e1e341883a399f12cc7574b55
   subpackages:
