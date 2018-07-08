@@ -118,8 +118,9 @@ func (emit *Emitter) On(etype string, handler Handler, priority ...int) {
 // Once register an event listener that is executed only once.
 func (emit *Emitter) Once(etype string, handler Handler, priority ...int) {
 	var wrapppedFunc Handler
-	wrapppedFunc = func(*Event) bool {
+	wrapppedFunc = func(evt *Event) bool {
 		emit.Off(etype, wrapppedFunc)
+		handler(evt)
 
 		return true
 	}
