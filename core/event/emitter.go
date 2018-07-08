@@ -92,15 +92,15 @@ func (emit *Emitter) On(etype string, handler Handler, priority ...int) {
 		return
 	}
 
-	size := len(emit.listeners)
-	if size >= emit.maxListeners {
+	size := len(lis)
+	if size > emit.maxListeners {
 		fmt.Printf(`
 			(%s) warning: possible Emitter memory leak detected. %d listeners added. 
 			Use emitter.setMaxListeners() to increase limit.\n`,
 			config.PROJECT_NAME, size)
 	}
 
-	for i := 0; i < len(lis); i++ {
+	for i := 0; i < size; i++ {
 		oldLi := lis[i]
 		if oldLi.priority < li.priority {
 			lis = append(lis[:i], li)
