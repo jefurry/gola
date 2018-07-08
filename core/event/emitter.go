@@ -120,7 +120,7 @@ func (emit *Emitter) Once(etype string, handler Handler, priority ...int) {
 	var wrapppedFunc Handler
 	wrapppedFunc = func(evt *Event) bool {
 		emit.Off(etype, wrapppedFunc)
-		
+
 		return handler(evt)
 	}
 
@@ -167,4 +167,13 @@ func (emit *Emitter) Fire(etype string, data interface{}, cxts ...interface{}) {
 			break
 		}
 	}
+}
+
+func (emit *Emitter) Listeners(etype string) []*listener {
+	lis, ok := emit.listeners[etype]
+	if !ok {
+		return nil
+	}
+
+	return lis
 }
