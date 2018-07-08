@@ -62,7 +62,7 @@ type (
 
 type (
 	// lua state pool manager.
-	PoolManager struct {
+	PM struct {
 		config *Config
 
 		opStatus OpStatus
@@ -81,7 +81,7 @@ type (
 	}
 )
 
-func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PoolManager, error) {
+func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PM, error) {
 	var c *Config
 	if config == nil {
 		c = &Config{
@@ -101,7 +101,7 @@ func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PoolManag
 		whenNew = whenNews[0]
 	}
 
-	pm := &PoolManager{
+	pm := &PM{
 		config:   c,
 		opStatus: OpReady,
 		whenNew:  whenNew,
@@ -115,11 +115,11 @@ func newPM(ctx context.Context, config *Config, whenNews ...NewFunc) (*PoolManag
 	return pm, nil
 }
 
-func Default(ctx context.Context, whenNews ...NewFunc) (*PoolManager, error) {
+func Default(ctx context.Context, whenNews ...NewFunc) (*PM, error) {
 	return newPM(ctx, nil, whenNews...)
 }
 
-func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*PoolManager, error) {
+func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*PM, error) {
 	if config == nil {
 		return Default(ctx, whenNews...)
 	}
@@ -127,7 +127,7 @@ func New(ctx context.Context, config *Config, whenNews ...NewFunc) (*PoolManager
 	return newPM(ctx, config, whenNews...)
 }
 
-func (pm *PoolManager) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFunction, error) {
+func (pm *PM) Load(ctx context.Context, reader io.Reader, name string) (*lua.LFunction, error) {
 	ls, err := pm.get(ctx)
 	if err != nil {
 		return nil, err
@@ -145,7 +145,7 @@ func (pm *PoolManager) Load(ctx context.Context, reader io.Reader, name string) 
 	return fn, nil
 }
 
-func (pm *PoolManager) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
+func (pm *PM) LoadFile(ctx context.Context, path string) (*lua.LFunction, error) {
 	ls, err := pm.get(ctx)
 	if err != nil {
 		return nil, err
@@ -163,7 +163,7 @@ func (pm *PoolManager) LoadFile(ctx context.Context, path string) (*lua.LFunctio
 	return fn, nil
 }
 
-func (pm *PoolManager) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
+func (pm *PM) LoadString(ctx context.Context, source string) (*lua.LFunction, error) {
 	ls, err := pm.get(ctx)
 	if err != nil {
 		return nil, err
@@ -181,7 +181,7 @@ func (pm *PoolManager) LoadString(ctx context.Context, source string) (*lua.LFun
 	return fn, nil
 }
 
-func (pm *PoolManager) DoFile(ctx context.Context, path string) error {
+func (pm *PM) DoFile(ctx context.Context, path string) error {
 	ls, err := pm.get(ctx)
 	if err != nil {
 		return err
@@ -198,7 +198,7 @@ func (pm *PoolManager) DoFile(ctx context.Context, path string) error {
 	return nil
 }
 
-func (pm *PoolManager) DoString(ctx context.Context, source string) error {
+func (pm *PM) DoString(ctx context.Context, source string) error {
 	ls, err := pm.get(ctx)
 	if err != nil {
 		return err
@@ -215,14 +215,14 @@ func (pm *PoolManager) DoString(ctx context.Context, source string) error {
 	return nil
 }
 
-func (pm *PoolManager) Status() OpStatus {
+func (pm *PM) Status() OpStatus {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
 	return pm.opStatus
 }
 
-func (pm *PoolManager) StatusString() string {
+func (pm *PM) StatusString() string {
 	opStatus := pm.Status()
 
 	if opStatus == OpReady {
@@ -238,32 +238,32 @@ func (pm *PoolManager) StatusString() string {
 	return "Unknown"
 }
 
-func (pm *PoolManager) ServingNum() int {
+func (pm *PM) ServingNum() int {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
 	return pm.servingNum
 }
 
-func (pm *PoolManager) TotalRequestedNum() int {
+func (pm *PM) TotalRequestedNum() int {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
 	return pm.totalRequestedNum
 }
 
-func (pm *PoolManager) Len() int {
+func (pm *PM) Len() int {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
 	return pm.length
 }
 
-func (pm *PoolManager) Cap() int {
+func (pm *PM) Cap() int {
 	return pm.config.maxNum
 }
 
-func (pm *PoolManager) Close(ls *lState) {
+func (pm *PM) Close(ls *lState) {
 	pm.lock.Lock()
 	pm.lock.Unlock()
 
@@ -281,7 +281,7 @@ func (pm *PoolManager) Close(ls *lState) {
 	ls.close()
 }
 
-func (pm *PoolManager) Shutdown() {
+func (pm *PM) Shutdown() {
 	pm.readyExit()
 	pm.exit()
 
@@ -290,7 +290,7 @@ func (pm *PoolManager) Shutdown() {
 	pm.lss = nil
 }
 
-func (pm *PoolManager) Restart(ctx context.Context) error {
+func (pm *PM) Restart(ctx context.Context) error {
 	pm.Shutdown()
 
 	if err := pm.start(ctx); err != nil {
@@ -300,7 +300,7 @@ func (pm *PoolManager) Restart(ctx context.Context) error {
 	return nil
 }
 
-func (pm *PoolManager) start(ctx context.Context) error {
+func (pm *PM) start(ctx context.Context) error {
 	pm.lss = make([]*lState, 0, pm.config.maxNum)
 	pm.lock = new(sync.Mutex)
 	pm.cond = sync.NewCond(pm.lock)
@@ -324,7 +324,7 @@ func (pm *PoolManager) start(ctx context.Context) error {
 }
 
 // put put lua state into pool.
-func (pm *PoolManager) put(ls *lState) error {
+func (pm *PM) put(ls *lState) error {
 	if ls.closed {
 		return ErrLSClosed
 	}
@@ -361,7 +361,7 @@ func (pm *PoolManager) put(ls *lState) error {
 	return nil
 }
 
-func (pm *PoolManager) get(ctx context.Context) (*lState, error) {
+func (pm *PM) get(ctx context.Context) (*lState, error) {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
@@ -400,7 +400,7 @@ func (pm *PoolManager) get(ctx context.Context) (*lState, error) {
 	return ls, nil
 }
 
-func (pm *PoolManager) gen(ctx context.Context) (*lState, error) {
+func (pm *PM) gen(ctx context.Context) (*lState, error) {
 	ls, err := newLState(ctx, pm.config.maxRequest, pm.config.idleTimeout,
 		pm.config.seconds, pm.config.options, pm.whenNew)
 	if err != nil {
@@ -410,14 +410,14 @@ func (pm *PoolManager) gen(ctx context.Context) (*lState, error) {
 	return ls, nil
 }
 
-func (pm *PoolManager) readyExit() {
+func (pm *PM) readyExit() {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 
 	pm.opStatus = OpExiting
 }
 
-func (pm *PoolManager) exit() {
+func (pm *PM) exit() {
 	pm.lock.Lock()
 	defer pm.lock.Unlock()
 

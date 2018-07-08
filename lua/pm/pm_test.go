@@ -290,7 +290,7 @@ func TestNew_1(t *testing.T) {
 }
 
 func TestNew_2(t *testing.T) {
-	var pm *PoolManager
+	var pm *PM
 	var err error
 
 	config1, err := NewConfig(45, -1, 230, 120, "1d")
