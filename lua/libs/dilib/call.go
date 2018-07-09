@@ -23,7 +23,7 @@ func diCall(L *lua.LState) int {
 		args = append(args, L.CheckAny(i))
 	}
 
-	v, err := call(L, val, args...)
+	v, err := cb.Call(L, val, args...)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
@@ -51,7 +51,7 @@ func diApply(L *lua.LState) int {
 		})
 	}
 
-	v, err := call(L, val, args...)
+	v, err := cb.Call(L, val, args...)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
@@ -114,33 +114,4 @@ func diBind(L *lua.LState) int {
 	L.Call(n, 1)
 
 	return 1
-}
-
-func call(L *lua.LState, val lua.LValue, args ...lua.LValue) (lua.LValue, error) {
-	callable, err := cb.New(L, val)
-	if err != nil {
-		return lua.LNil, err
-	}
-
-	fn, err := callable.ObjFn(L)
-	if err != nil {
-		return lua.LNil, err
-	}
-
-	n := len(args)
-	ref := callable.Ref()
-
-	L.Push(fn)
-	if ref != lua.LNil {
-		L.Push(ref)
-		n += 1
-	}
-
-	for _, v := range args {
-		L.Push(v)
-	}
-
-	L.Call(n, 1)
-
-	return L.Get(-1), nil
 }
