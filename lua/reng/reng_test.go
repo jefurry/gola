@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func xTestDefault(t *testing.T) {
+func TestDefault(t *testing.T) {
 	ctx, _ := context.WithTimeout(context.TODO(), 1*time.Second)
 	lpm, err := Default(ctx)
 	if !assert.NoError(t, err, "Default should succeed") {
@@ -64,7 +64,7 @@ func TestWithLuaCode(t *testing.T) {
 
 	options := lpm.Config().Options()
 
-	if !assert.Equal(t, true, options.SkipOpenLibs, "") {
+	if !assert.Equal(t, true, options.SkipOpenLibs, "SkipOpenLibs should be true") {
 		return
 	}
 
