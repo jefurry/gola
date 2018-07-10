@@ -11,16 +11,16 @@ package reng
 
 import (
 	"context"
-	golua "github.com/jefurry/gola/lua"
+	glua "github.com/jefurry/gola/lua"
 	"github.com/jefurry/gola/lua/pm"
 	"github.com/yuin/gopher-lua"
 )
 
-var luaLibs = []golua.LuaLib{
-	golua.LuaLib{lua.BaseLibName, lua.OpenBase},
-	golua.LuaLib{lua.TabLibName, lua.OpenTable},
-	golua.LuaLib{lua.StringLibName, lua.OpenString},
-	golua.LuaLib{lua.MathLibName, lua.OpenMath},
+var luaLibs = []glua.LuaLib{
+	glua.LuaLib{lua.BaseLibName, lua.OpenBase},
+	glua.LuaLib{lua.TabLibName, lua.OpenTable},
+	glua.LuaLib{lua.StringLibName, lua.OpenString},
+	glua.LuaLib{lua.MathLibName, lua.OpenMath},
 }
 
 func whenNew(L *lua.LState) error {
