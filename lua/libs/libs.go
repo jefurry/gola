@@ -14,6 +14,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/eventlib"
 	"github.com/jefurry/gola/lua/libs/execlib"
 	"github.com/jefurry/gola/lua/libs/oslib"
+	"github.com/jefurry/gola/lua/libs/userlib"
 	"github.com/jefurry/gola/lua/libs/syslib"
 	"github.com/jefurry/gola/lua/libs/timelib"
 	"github.com/yuin/gopher-lua"
@@ -23,6 +24,7 @@ func OpenLibs(L *lua.LState) {
 	baselib.Open(L)
 	oslib.Open(L)
 	execlib.Open(L)
+	userlib.Open(L)
 	syslib.Open(L)
 	timelib.Open(L)
 	dilib.Open(L)
