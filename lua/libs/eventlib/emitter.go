@@ -363,7 +363,7 @@ func checkEmitter(L *lua.LState, n int) *emitter {
 		return dii
 	}
 
-	L.ArgError(1, fmt.Sprintf("%s expected, got %s", eventEmitterTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", eventEmitterTypeName, ud.Type()))
 
 	return nil
 }
