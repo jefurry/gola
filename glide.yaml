@@ -7,6 +7,25 @@ import:
 - package: github.com/robertkrimen/otto
 - package: github.com/jefurry/logrus
   version: ^2.0.6
+- package: github.com/layeh/gopher-luar
+  version: ^1.0.4
+- package: github.com/yuin/gluamapper
+- package: github.com/yuin/gluare
+- package: github.com/cjoudrey/gluahttp
+- package: github.com/layeh/gopher-json
+- package: github.com/kohkimakimoto/gluayaml
+- package: github.com/layeh/gopher-lfs
+- package: github.com/cjoudrey/gluaurl
+- package: github.com/ailncode/gluaxmlpath
+- package: github.com/BixData/gluasocket
+  version: ^0.1.0
+- package: github.com/BixData/gluabit32
+- package: github.com/rucuriousyet/gmoonscript
+- package: github.com/yhat/scrape
+- package: golang.org/x/net
+  subpackages:
+  - html
+  - html/atom
 testImport:
 - package: github.com/stretchr/testify
   version: ^1.2.2

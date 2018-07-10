@@ -1,6 +1,29 @@
-hash: 3668bb1dd5ce06333a2dd1847ff5f2fedde2b1330edee9d9fc76203f38292b21
-updated: 2018-07-09T16:21:46.405716561+08:00
+hash: d02017121adcd56c66527933b56e3c8e31473ee4994a97355dc7504af057281a
+updated: 2018-07-11T05:42:46.78747021+08:00
 imports:
+- name: github.com/ailncode/gluaxmlpath
+  version: 6ce478ecb4a60c4fc8929838e0b21b7fb7ca7440
+- name: github.com/BixData/gluabit32
+  version: fa1820b42f4b61b5bb986c25e4319dc46f820075
+- name: github.com/BixData/gluasocket
+  version: a3d275e0e9ca0bc7ae184cb7795e6dae3747ad2c
+  subpackages:
+  - ltn12
+  - mime
+  - mimecore
+  - socket
+  - socketcore
+  - socketexcept
+  - socketftp
+  - socketheaders
+  - sockethttp
+  - socketsmtp
+  - sockettp
+  - socketurl
+- name: github.com/cjoudrey/gluahttp
+  version: 7065ce73b887f40cfa36eba8ae857cfbdb8ed78f
+- name: github.com/cjoudrey/gluaurl
+  version: 31cbb9bef199454415879f2e6d609d1136d60cad
 - name: github.com/emirpasic/gods
   version: bba54c718c4e39e4db35f73e0c660df44a4de4cd
   subpackages:
@@ -13,6 +36,14 @@ imports:
   subpackages:
   - hooks/rotatelog
   - hooks/rotatelog/internal/option
+- name: github.com/kohkimakimoto/gluayaml
+  version: 6fe413d49d73d785510ecf1529991ab0573e96c7
+- name: github.com/layeh/gopher-json
+  version: 1f632b9a4f86b51489c7aa028bc05512f6807785
+- name: github.com/layeh/gopher-lfs
+  version: 023c51c79dfa6bc42efcb50a3d49bf755483312b
+- name: github.com/layeh/gopher-luar
+  version: 2518c8179c6de77f760f5a82df43f6f9a8ad8657
 - name: github.com/lestrrat-go/strftime
   version: 59966ecb6d84ec0010de6a5b8deae0299ce5b549
 - name: github.com/mitchellh/go-homedir
@@ -21,6 +52,14 @@ imports:
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
 - name: github.com/robertkrimen/otto
   version: 15f95af6e78dcd2030d8195a138bd88d4f403546
+- name: github.com/rucuriousyet/gmoonscript
+  version: 5dabbc2588b0a72cdcd57d86807654b099fcab4a
+- name: github.com/yhat/scrape
+  version: 24b7890b0945459dbf91743e4d2ac5d75a51fee2
+- name: github.com/yuin/gluamapper
+  version: d836955830e75240d46ce9f0e6d148d94f2e1d3a
+- name: github.com/yuin/gluare
+  version: d7c94f1a80ede93a621ed100866e6d4745ca8c22
 - name: github.com/yuin/gopher-lua
   version: 46796da1b0b4794e1e341883a399f12cc7574b55
   subpackages:
@@ -31,11 +70,20 @@ imports:
   version: 9419663f5a44be8b34ca85f08abc5fe1be11f8a3
   subpackages:
   - ssh/terminal
+- name: golang.org/x/net
+  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+  subpackages:
+  - html
+  - html/atom
 - name: golang.org/x/sys
   version: ebfc5b4631820b793c9010c87fd8fef0f39eb082
   subpackages:
   - unix
   - windows
+- name: gopkg.in/xmlpath.v2
+  version: 860cbeca3ebcc600db0b213c0e83ad6ce91f5739
+- name: gopkg.in/yaml.v2
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports:
 - name: github.com/davecgh/go-spew
   version: 8991bc29aa16c548c550c7ff78260e27b9ab7c73
