@@ -250,7 +250,7 @@ func eventEmitterNew(L *lua.LState) int {
 }
 
 func eventEmitterOn(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	etype := L.CheckString(2)
 	handler := L.CheckFunction(3)
 	priority := L.OptInt(4, -1)
@@ -269,7 +269,7 @@ func eventEmitterOn(L *lua.LState) int {
 }
 
 func eventEmitterOnce(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	etype := L.CheckString(2)
 	handler := L.CheckFunction(3)
 	priority := L.OptInt(4, -1)
@@ -288,7 +288,7 @@ func eventEmitterOnce(L *lua.LState) int {
 }
 
 func eventEmitterOff(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	etype := L.CheckString(2)
 	handler := L.CheckFunction(3)
 	emit.emitterOff(lua.LString(etype), handler)
@@ -297,7 +297,7 @@ func eventEmitterOff(L *lua.LState) int {
 }
 
 func eventEmitterFire(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	etype := L.CheckString(2)
 	data := L.OptTable(3, nil)
 	L.CheckTypes(4, lua.LTTable, lua.LTUserData, lua.LTNil)
@@ -309,7 +309,7 @@ func eventEmitterFire(L *lua.LState) int {
 }
 
 func eventEmitterGetListeners(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	etype := L.CheckString(2)
 	L.Push(emit.getListeners(L, lua.LString(etype)))
 
@@ -317,7 +317,7 @@ func eventEmitterGetListeners(L *lua.LState) int {
 }
 
 func eventEmitterSetMaxListeners(L *lua.LState) int {
-	emit := checkEmitter(L)
+	emit := checkEmitter(L, 1)
 	n := L.OptInt(2, -1)
 
 	err := emit.setMaxListeners(n)
@@ -357,8 +357,8 @@ var eventEmitterFuncs = map[string]lua.LGFunction{
 
 var eventEventFuncs = map[string]lua.LGFunction{}
 
-func checkEmitter(L *lua.LState) *emitter {
-	ud := L.CheckUserData(1)
+func checkEmitter(L *lua.LState, n int) *emitter {
+	ud := L.CheckUserData(n)
 	if dii, ok := ud.Value.(*emitter); ok {
 		return dii
 	}
