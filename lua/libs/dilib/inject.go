@@ -370,7 +370,7 @@ func diInjectorNew(L *lua.LState) int {
 }
 
 func diInjectorAdd(L *lua.LState) int {
-	dii := checkInjector(L)
+	dii := checkInjector(L, 1)
 	tb := L.CheckTable(2)
 
 	err := dii.add(L, tb)
@@ -388,7 +388,7 @@ func diInjectorAdd(L *lua.LState) int {
 
 // Return a named service.
 func diInjectorGet(L *lua.LState) int {
-	dii := checkInjector(L)
+	dii := checkInjector(L, 1)
 	name := L.CheckAny(2)
 	deps := L.OptTable(3, nil)
 
@@ -415,7 +415,7 @@ func diInjectorGet(L *lua.LState) int {
 }
 
 func diInjectorInvoke(L *lua.LState) int {
-	dii := checkInjector(L)
+	dii := checkInjector(L, 1)
 	L.CheckTypes(2, lua.LTTable, lua.LTFunction)
 	val := L.CheckAny(2)
 	deps := L.OptTable(3, nil)
@@ -443,7 +443,7 @@ func diInjectorInvoke(L *lua.LState) int {
 }
 
 func diInjectorInstantiate(L *lua.LState) int {
-	dii := checkInjector(L)
+	dii := checkInjector(L, 1)
 	val := L.CheckTable(2)
 	deps := L.OptTable(3, nil)
 
@@ -484,8 +484,8 @@ var diInjectorFuncs = map[string]lua.LGFunction{
 	"instantiate": diInjectorInstantiate,
 }
 
-func checkInjector(L *lua.LState) *diInjector {
-	ud := L.CheckUserData(1)
+func checkInjector(L *lua.LState, n int) *diInjector {
+	ud := L.CheckUserData(n)
 	if dii, ok := ud.Value.(*diInjector); ok {
 		return dii
 	}
