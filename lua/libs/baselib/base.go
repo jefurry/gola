@@ -15,7 +15,11 @@ import (
 )
 
 func Open(L *lua.LState) {
-	packagemod := L.GetGlobal(lua.LoadLibName).(*lua.LTable)
+	packagemod, ok := L.GetGlobal(lua.LoadLibName).(*lua.LTable)
+	if !ok {
+		L.RaiseError("module(%v) not exists", lua.LoadLibName)
+	}
+
 	L.SetFuncs(packagemod, baseFuncs)
 }
 
