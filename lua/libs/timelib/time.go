@@ -33,6 +33,10 @@ func Loader(L *lua.LState) int {
 	dimod.RawSetString("UTC", newLocation(L, time.UTC))
 	dimod.RawSetString("Local", newLocation(L, time.Local))
 
+	for k, v := range timeFields {
+		dimod.RawSetString(k, v)
+	}
+
 	return 1
 }
 
@@ -52,7 +56,7 @@ var timeFuncs = map[string]lua.LGFunction{
 	"isLeap": timeIsLeap,
 }
 
-var timeExportFields = map[string]lua.LValue{
+var timeFields = map[string]lua.LValue{
 	"ANSIC":       lua.LString(time.ANSIC),
 	"UnixDate":    lua.LString(time.UnixDate),
 	"RubyDate":    lua.LString(time.RubyDate),
