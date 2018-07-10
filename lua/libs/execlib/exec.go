@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	ExecLibName = "exec"
+	ExecLibName = "os/exec"
 )
 
 func Open(L *lua.LState) {
