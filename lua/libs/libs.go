@@ -12,6 +12,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/baselib"
 	"github.com/jefurry/gola/lua/libs/dilib"
 	"github.com/jefurry/gola/lua/libs/eventlib"
+	"github.com/jefurry/gola/lua/libs/timelib"
 	"github.com/yuin/gopher-lua"
 )
 
@@ -19,4 +20,5 @@ func OpenLibs(L *lua.LState) {
 	baselib.Open(L)
 	dilib.Open(L)
 	eventlib.Open(L)
+	timelib.Open(L)
 }
