@@ -113,5 +113,7 @@ func diBind(L *lua.LState) int {
 
 	L.Call(n, 1)
 
+	L.Push(L.Get(-1))
+
 	return 1
 }
