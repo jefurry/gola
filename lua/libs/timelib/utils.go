@@ -24,7 +24,7 @@ func checkTime(L *lua.LState, n int) time.Time {
 		return v
 	}
 
-	L.ArgError(1, fmt.Sprintf("%s expected, got %s", timeLocationTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", timeLocationTypeName, ud.Type()))
 
 	return time.Time{}
 }
@@ -35,7 +35,7 @@ func checkLocation(L *lua.LState, n int) *time.Location {
 		return v
 	}
 
-	L.ArgError(1, fmt.Sprintf("%s expected, got %s", timeLocationTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", timeLocationTypeName, ud.Type()))
 
 	return nil
 }
