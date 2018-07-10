@@ -490,7 +490,7 @@ func checkInjector(L *lua.LState, n int) *diInjector {
 		return dii
 	}
 
-	L.ArgError(1, fmt.Sprintf("%s expected, got %s", diInjectorTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", diInjectorTypeName, ud.Type()))
 
 	return nil
 }
