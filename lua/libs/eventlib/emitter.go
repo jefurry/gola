@@ -87,7 +87,7 @@ func newEmitter(maxListeners int) *emitter {
 // that to be increased. Set to zero for unlimited.
 func (emit *emitter) setMaxListeners(n int) error {
 	if n < 0 {
-		return errors.New("n must be a positive number")
+		return errors.Errorf("n(%v) must be a positive number", n)
 	}
 
 	emit.maxListeners = lua.LNumber(n)
@@ -100,7 +100,7 @@ func (emit *emitter) emitterOn(etype lua.LString, handler *lua.LFunction, priori
 	if len(priority) > 0 {
 		pri = priority[0]
 		if pri < 0 {
-			return errors.New("priority must be a positive number")
+			return errors.Errorf("priority(%v) must be a positive number", pri)
 		}
 	}
 
