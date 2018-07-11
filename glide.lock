@@ -1,5 +1,5 @@
-hash: d02017121adcd56c66527933b56e3c8e31473ee4994a97355dc7504af057281a
-updated: 2018-07-11T05:42:46.78747021+08:00
+hash: 994aef6229cab36e916d9e8c8c56dc0a023d699c3ec9d356f8078f10254b9058
+updated: 2018-07-11T20:38:01.230594002+08:00
 imports:
 - name: github.com/ailncode/gluaxmlpath
   version: 6ce478ecb4a60c4fc8929838e0b21b7fb7ca7440
@@ -24,6 +24,8 @@ imports:
   version: 7065ce73b887f40cfa36eba8ae857cfbdb8ed78f
 - name: github.com/cjoudrey/gluaurl
   version: 31cbb9bef199454415879f2e6d609d1136d60cad
+- name: github.com/dgrijalva/jwt-go
+  version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
 - name: github.com/emirpasic/gods
   version: bba54c718c4e39e4db35f73e0c660df44a4de4cd
   subpackages:
