@@ -57,30 +57,30 @@ var timeFuncs = map[string]lua.LGFunction{
 }
 
 var timeFields = map[string]lua.LValue{
-	"ANSIC":       lua.LString(time.ANSIC),
-	"UnixDate":    lua.LString(time.UnixDate),
-	"RubyDate":    lua.LString(time.RubyDate),
-	"RFC822":      lua.LString(time.RFC822),
-	"RFC822Z":     lua.LString(time.RFC822Z),
-	"RFC850":      lua.LString(time.RFC850),
-	"RFC1123":     lua.LString(time.RFC1123),
-	"RFC1123Z":    lua.LString(time.RFC1123Z),
-	"RFC3339":     lua.LString(time.RFC3339),
-	"RFC3339Nano": lua.LString(time.RFC3339Nano),
-	"Kitchen":     lua.LString(time.Kitchen),
+	"ANSIC":        lua.LString(time.ANSIC),
+	"UNIX_DATE":    lua.LString(time.UnixDate),
+	"RUBY_DATE":    lua.LString(time.RubyDate),
+	"RFC822":       lua.LString(time.RFC822),
+	"RFC822Z":      lua.LString(time.RFC822Z),
+	"RFC850":       lua.LString(time.RFC850),
+	"RFC1123":      lua.LString(time.RFC1123),
+	"RFC1123Z":     lua.LString(time.RFC1123Z),
+	"RFC3339":      lua.LString(time.RFC3339),
+	"RFC3339_NANO": lua.LString(time.RFC3339Nano),
+	"KIT_CHEN":     lua.LString(time.Kitchen),
 	// Handy time stamps.
-	"Stamp":      lua.LString(time.Stamp),
-	"StampMilli": lua.LString(time.StampMilli),
-	"StampMicro": lua.LString(time.StampMicro),
-	"StampNano":  lua.LString(time.StampNano),
+	"STAMP":       lua.LString(time.Stamp),
+	"STAMP_MILLI": lua.LString(time.StampMilli),
+	"STAMP_MICRO": lua.LString(time.StampMicro),
+	"STAMP_NANO":  lua.LString(time.StampNano),
 
 	// time.Duration
-	"Nanosecond":  lua.LNumber(time.Nanosecond),
-	"Microsecond": lua.LNumber(time.Microsecond),
-	"Millisecond": lua.LNumber(time.Millisecond),
-	"Second":      lua.LNumber(time.Second),
-	"Minute":      lua.LNumber(time.Minute),
-	"Hour":        lua.LNumber(time.Hour),
+	"NANO_SECOND":  lua.LNumber(time.Nanosecond),
+	"MICRO_SECOND": lua.LNumber(time.Microsecond),
+	"MILLI_SECOND": lua.LNumber(time.Millisecond),
+	"SECOND":       lua.LNumber(time.Second),
+	"MINUTE":       lua.LNumber(time.Minute),
+	"HOUR":         lua.LNumber(time.Hour),
 }
 
 func timeNow(L *lua.LState) int {
