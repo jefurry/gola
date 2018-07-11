@@ -56,6 +56,17 @@ func logParseLevel(L *lua.LState) int {
 	return 1
 }
 
+func logGetAllLevels(L *lua.LState) int {
+	tb := L.CreateTable(len(logrus.AllLevels), 0)
+	for i, v := range logrus.AllLevels {
+		tb.RawSetInt(i, lua.LNumber(v))
+	}
+
+	L.Push(tb)
+
+	return 1
+}
+
 func logRegister(L *lua.LState, module *lua.LTable) {
 	// static attributes
 	for k, v := range logFields {
@@ -65,6 +76,7 @@ func logRegister(L *lua.LState, module *lua.LTable) {
 
 var logFuncs = map[string]lua.LGFunction{
 	"parseLevel":       logParseLevel,
+	"getAllLevels":     logGetAllLevels,
 	"newLogger":        logLoggerNew,
 	"newEntry":         logEntryNew,
 	"newTextFormatter": logTextFormatterNew,
