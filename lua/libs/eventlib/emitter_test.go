@@ -16,7 +16,7 @@ import (
 
 func TestEmitter_OnOff_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -63,7 +63,7 @@ func TestEmitter_OnOff_1(t *testing.T) {
 
 func TestEmitter_OnOff_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -118,7 +118,7 @@ func TestEmitter_OnOff_2(t *testing.T) {
 
 func TestEmitter_OnOff_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -182,7 +182,7 @@ func TestEmitter_OnOff_3(t *testing.T) {
 
 func TestEmitter_Fire_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -232,7 +232,7 @@ func TestEmitter_Fire_1(t *testing.T) {
 
 func TestEmitter_Once(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

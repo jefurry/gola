@@ -16,7 +16,7 @@ import (
 
 func TestEvent(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	data := L.CreateTable(0, 2)
@@ -53,7 +53,7 @@ func TestEvent(t *testing.T) {
 
 func TestEventLuaCode(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(EventLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
