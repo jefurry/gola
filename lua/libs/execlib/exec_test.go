@@ -20,7 +20,7 @@ func TestExec(t *testing.T) {
 	defer L.Close()
 
 	code := `
-	local exec = require('os/exec')
+	local exec = require('os.exec')
 
 	assert(type(exec) == "table", "exec should be a table")
 	assert(type(exec.lookPath) == "function", "exec.lookPath should be a function")
