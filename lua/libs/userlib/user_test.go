@@ -20,7 +20,7 @@ func TestExec(t *testing.T) {
 	defer L.Close()
 
 	code := `
-	local user = require('os/user')
+	local user = require('os.user')
 
 	assert(type(user) == "table", "user should be a table")
 	assert(type(user.current) == "function", "user.current should be a function")

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	UserLibName = "os/user"
+	UserLibName = "os.user"
 )
 
 func Open(L *lua.LState) {
