@@ -16,7 +16,7 @@ import (
 
 func TestTimeDefaultDate(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(TimeLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -91,7 +91,7 @@ func TestTimeDefaultDate(t *testing.T) {
 
 func TestTimeDate(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(TimeLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -170,7 +170,7 @@ func TestTimeDate(t *testing.T) {
 
 func TestTimeLocalDate(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(TimeLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

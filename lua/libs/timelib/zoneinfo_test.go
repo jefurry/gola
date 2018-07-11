@@ -16,7 +16,7 @@ import (
 
 func TestLocation(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(TimeLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
