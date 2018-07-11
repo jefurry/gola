@@ -91,7 +91,7 @@ func TestLog(t *testing.T) {
 
 	-- logger
 	local logger = log.newLogger()
-	logger:setOut(log.Discard)
+	logger:setOut(log.DISCARD)
 	logger:setFormatter(formatter)
 	logger:addHook(rotatelogHook)
 	logger:info("Good Luck")
