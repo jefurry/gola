@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestExec(t *testing.T) {
+func TestFilepath(t *testing.T) {
 	L := lua.NewState()
 	Open(L)
 	defer L.Close()
