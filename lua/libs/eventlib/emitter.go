@@ -359,8 +359,8 @@ var eventEventFuncs = map[string]lua.LGFunction{}
 
 func checkEmitter(L *lua.LState, n int) *emitter {
 	ud := L.CheckUserData(n)
-	if dii, ok := ud.Value.(*emitter); ok {
-		return dii
+	if emit, ok := ud.Value.(*emitter); ok {
+		return emit
 	}
 
 	L.ArgError(n, fmt.Sprintf("%s expected, got %s", eventEmitterTypeName, ud.Type()))
