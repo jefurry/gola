@@ -21,6 +21,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/oslib"
 	"github.com/jefurry/gola/lua/libs/relib"
 	//"github.com/jefurry/gola/lua/libs/scrapelib"
+	"github.com/jefurry/gola/lua/libs/filepathlib"
 	"github.com/jefurry/gola/lua/libs/loglib"
 	"github.com/jefurry/gola/lua/libs/pathlib"
 	"github.com/jefurry/gola/lua/libs/socketlib"
@@ -40,6 +41,7 @@ func OpenLibs(L *lua.LState) {
 	userlib.Open(L)
 	syslib.Open(L)
 	pathlib.Open(L)
+	filepathlib.Open(L)
 	timelib.Open(L)
 	dilib.Open(L)
 	loglib.Open(L)
