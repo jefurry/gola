@@ -110,21 +110,21 @@ var osFields = map[string]lua.LValue{
 var osFileModeFields = map[string]os.FileMode{
 	// The single letters are the abbreviations
 	// used by the String method's formatting.
-	"ModeDir":        os.ModeDir,        // d: is a directory
-	"ModeAppend":     os.ModeAppend,     // a: append-only
-	"ModeExclusive":  os.ModeExclusive,  // l: exclusive use
-	"ModeTemporary":  os.ModeTemporary,  // T: temporary file; Plan 9 only
-	"ModeSymlink":    os.ModeSymlink,    // L: symbolic link
-	"ModeDevice":     os.ModeDevice,     // D: device file
-	"ModeNamedPipe":  os.ModeNamedPipe,  // p: named pipe (FIFO)
-	"ModeSocket":     os.ModeSocket,     // S: Unix domain socket
-	"ModeSetuid":     os.ModeSetuid,     // u: setuid
-	"ModeSetgid":     os.ModeSetgid,     // g: setgid
-	"ModeCharDevice": os.ModeCharDevice, // c: Unix character device, when ModeDevice is set
-	"ModeSticky":     os.ModeSticky,     // t: sticky
+	"MODE_DIR":         os.ModeDir,        // d: is a directory
+	"MODE_APPEND":      os.ModeAppend,     // a: append-only
+	"MODE_EXCLUSIVE":   os.ModeExclusive,  // l: exclusive use
+	"MODE_TEMPORARY":   os.ModeTemporary,  // T: temporary file; Plan 9 only
+	"MODE_SYMLINK":     os.ModeSymlink,    // L: symbolic link
+	"MODE_DEVICE":      os.ModeDevice,     // D: device file
+	"MODE_NAME_PIPE":   os.ModeNamedPipe,  // p: named pipe (FIFO)
+	"MODE_SOCKET":      os.ModeSocket,     // S: Unix domain socket
+	"MODE_SET_UID":     os.ModeSetuid,     // u: setuid
+	"MODE_SET_GID":     os.ModeSetgid,     // g: setgid
+	"MODE_CHAR_DEVICE": os.ModeCharDevice, // c: Unix character device, when ModeDevice is set
+	"MODE_STICKY":      os.ModeSticky,     // t: sticky
 	// Mask for the type bits. For regular files, none will be set.
-	"ModeType": os.ModeType,
-	"ModePerm": os.ModePerm, // Unix permission bits
+	"MODE_TYPE": os.ModeType,
+	"MODE_PERM": os.ModePerm, // Unix permission bits
 }
 
 func osChdir(L *lua.LState) int {
