@@ -17,6 +17,25 @@ const (
 	timeTimeTypeName = TimeLibName + ".TIME*"
 )
 
+func timeTimeFormat(L *lua.LState) int {
+	t := checkTime(L, 1)
+	layout := L.CheckString(2)
+
+	L.Push(lua.LString(t.Format(layout)))
+
+	return 1
+}
+
+func timeTimeAppendFormat(L *lua.LState) int {
+	t := checkTime(L, 1)
+	bs := L.CheckString(2)
+	layout := L.CheckString(3)
+
+	L.Push(lua.LString(string(t.AppendFormat([]byte(bs), layout))))
+
+	return 1
+}
+
 func timeTimeAfter(L *lua.LState) int {
 	t := checkTime(L, 1)
 	u := checkTime(L, 2)
@@ -304,32 +323,34 @@ func timeRegisterTimeMetatype(L *lua.LState) {
 }
 
 var timeTimeFuncs = map[string]lua.LGFunction{
-	"after":      timeTimeAfter,
-	"before":     timeTimeBefore,
-	"equal":      timeTimeEqual,
-	"isZero":     timeTimeIsZero,
-	"date":       timeTimeDate,
-	"year":       timeTimeYear,
-	"month":      timeTimeMonth,
-	"day":        timeTimeDay,
-	"weekday":    timeTimeWeekday,
-	"isoWeek":    timeTimeISOWeek,
-	"clock":      timeTimeClock,
-	"hour":       timeTimeHour,
-	"minute":     timeTimeMinute,
-	"second":     timeTimeSecond,
-	"nanosecond": timeTimeNanosecond,
-	"yearDay":    timeTimeYearDay,
-	"add":        timeTimeAdd,
-	"sub":        timeTimeSub,
-	"addDate":    timeTimeAddDate,
-	"UTC":        timeTimeUTC,
-	"Local":      timeTimeLocal,
-	"In":         timeTimeIn,
-	"location":   timeTimeLocation,
-	"zone":       timeTimeZone,
-	"unix":       timeTimeUnix,
-	"unixNano":   timeTimeUnixNano,
-	"truncate":   timeTimeTruncate,
-	"round":      timeTimeRound,
+	"format":       timeTimeFormat,
+	"appendFormat": timeTimeAppendFormat,
+	"after":        timeTimeAfter,
+	"before":       timeTimeBefore,
+	"equal":        timeTimeEqual,
+	"isZero":       timeTimeIsZero,
+	"date":         timeTimeDate,
+	"year":         timeTimeYear,
+	"month":        timeTimeMonth,
+	"day":          timeTimeDay,
+	"weekday":      timeTimeWeekday,
+	"isoWeek":      timeTimeISOWeek,
+	"clock":        timeTimeClock,
+	"hour":         timeTimeHour,
+	"minute":       timeTimeMinute,
+	"second":       timeTimeSecond,
+	"nanosecond":   timeTimeNanosecond,
+	"yearDay":      timeTimeYearDay,
+	"add":          timeTimeAdd,
+	"sub":          timeTimeSub,
+	"addDate":      timeTimeAddDate,
+	"UTC":          timeTimeUTC,
+	"Local":        timeTimeLocal,
+	"In":           timeTimeIn,
+	"location":     timeTimeLocation,
+	"zone":         timeTimeZone,
+	"unix":         timeTimeUnix,
+	"unixNano":     timeTimeUnixNano,
+	"truncate":     timeTimeTruncate,
+	"round":        timeTimeRound,
 }
