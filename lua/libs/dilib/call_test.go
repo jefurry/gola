@@ -16,7 +16,7 @@ import (
 
 func TestCall_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -74,7 +74,7 @@ func TestCall_3(t *testing.T) {
 
 func TestCall_4(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

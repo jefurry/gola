@@ -17,7 +17,7 @@ import (
 
 func TestAnnotate_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	fn := L.NewFunction(func(l *lua.LState) int {
@@ -56,7 +56,7 @@ func TestAnnotate_1(t *testing.T) {
 
 func TestAnnotate_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	fn := L.NewFunction(func(l *lua.LState) int {
@@ -200,7 +200,7 @@ func TestAnnotate_2(t *testing.T) {
 
 func TestAnnotate_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	fn := L.NewFunction(func(l *lua.LState) int {
@@ -344,7 +344,7 @@ func TestAnnotate_3(t *testing.T) {
 
 func TestAnnotate_4(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	fn := L.NewFunction(func(l *lua.LState) int {
@@ -511,7 +511,7 @@ func TestAnnotate_4(t *testing.T) {
 
 func TestAnnotate_5(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -565,7 +565,7 @@ func TestAnnotate_5(t *testing.T) {
 
 func TestAnnotate_6(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -619,7 +619,7 @@ func TestAnnotate_6(t *testing.T) {
 
 func TestAnnotate_7(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -677,7 +677,7 @@ func TestAnnotate_7(t *testing.T) {
 
 func TestAnnotate_8(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -735,7 +735,7 @@ func TestAnnotate_8(t *testing.T) {
 
 func TestAssoc(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -793,7 +793,7 @@ func TestAssoc(t *testing.T) {
 
 func TestDissoc_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -855,7 +855,7 @@ func TestDissoc_1(t *testing.T) {
 
 func TestDissoc_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

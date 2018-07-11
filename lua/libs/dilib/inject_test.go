@@ -16,7 +16,7 @@ import (
 
 func TestInjectorInstantiate_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -105,7 +105,7 @@ func TestInjectorInstantiate_1(t *testing.T) {
 
 func TestInjectorInstantiate_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -179,7 +179,7 @@ func TestInjectorInstantiate_2(t *testing.T) {
 
 func TestInjectorInstantiate_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

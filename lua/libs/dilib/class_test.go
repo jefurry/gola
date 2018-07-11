@@ -16,7 +16,7 @@ import (
 
 func TestCreateClass_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -72,7 +72,7 @@ func TestCreateClass_1(t *testing.T) {
 
 func TestCreateClass_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -155,7 +155,7 @@ func TestCreateClass_2(t *testing.T) {
 
 func TestCreateClass_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -205,7 +205,7 @@ func TestCreateClass_3(t *testing.T) {
 
 func TestCreateClass_4(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `

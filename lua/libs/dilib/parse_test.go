@@ -16,7 +16,7 @@ import (
 
 func TestParse_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -77,7 +77,7 @@ func TestParse_1(t *testing.T) {
 
 func TestParse_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -138,7 +138,7 @@ func TestParse_2(t *testing.T) {
 
 func TestParse_3(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -199,7 +199,7 @@ func TestParse_3(t *testing.T) {
 
 func TestParse_4(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -264,7 +264,7 @@ func TestParse_4(t *testing.T) {
 
 func TestParseDotParams_1(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
@@ -309,7 +309,7 @@ func TestParseDotParams_1(t *testing.T) {
 
 func TestParseDotParams_2(t *testing.T) {
 	L := lua.NewState()
-	L.PreloadModule(DiLibName, Loader)
+	Open(L)
 	defer L.Close()
 
 	code := `
