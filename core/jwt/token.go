@@ -67,6 +67,10 @@ func (t *Token) Signed(key string) (string, error) {
 	return "", ErrInvalidSigningMethod
 }
 
+func (t *Token) GetToken() *jwt.Token {
+	return t.tk
+}
+
 func Parse(tokenString string, keyFunc jwt.Keyfunc) (*Token, error) {
 	tk, err := jwt.Parse(tokenString, keyFunc)
 	if err != nil {
