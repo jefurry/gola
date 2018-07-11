@@ -28,10 +28,19 @@ func Loader(L *lua.LState) int {
 	eventmod := L.SetFuncs(L.NewTable(), eventFuncs)
 	L.Push(eventmod)
 
+	for k, v := range eventFields {
+		eventmod.RawSetString(k, v)
+	}
+
 	return 1
 }
 
 var eventFuncs = map[string]lua.LGFunction{
 	"newEvent":   eventEventNew,
 	"newEmitter": eventEmitterNew,
+}
+
+var eventFields = map[string]lua.LValue{
+	"DEFAULT_PRIORITY":      lua.LNumber(defaultPriority),
+	"DEFAULT_MAX_LISTENERS": lua.LNumber(defaultMaxListeners),
 }
