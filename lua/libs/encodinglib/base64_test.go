@@ -16,7 +16,7 @@ import (
 
 func TestEncodingStd(t *testing.T) {
 	L := lua.NewState()
-	Open(L)
+	OpenBase64(L)
 	defer L.Close()
 
 	code := `

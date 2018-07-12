@@ -21,6 +21,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/oslib"
 	"github.com/jefurry/gola/lua/libs/relib"
 	//"github.com/jefurry/gola/lua/libs/scrapelib"
+	"github.com/jefurry/gola/lua/libs/encodinglib"
 	"github.com/jefurry/gola/lua/libs/filepathlib"
 	"github.com/jefurry/gola/lua/libs/jwtlib"
 	"github.com/jefurry/gola/lua/libs/loglib"
@@ -44,6 +45,7 @@ func OpenLibs(L *lua.LState) {
 	pathlib.Open(L)
 	filepathlib.Open(L)
 	timelib.Open(L)
+	encodinglib.Open(L)
 	dilib.Open(L)
 	loglib.Open(L)
 	eventlib.Open(L)
