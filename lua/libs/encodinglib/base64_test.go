@@ -14,6 +14,51 @@ import (
 	"testing"
 )
 
+func TestEncodingWithPadding(t *testing.T) {
+	L := lua.NewState()
+	OpenBase64(L)
+	defer L.Close()
+
+	code := `
+	local base64 = require('encoding.base64')
+
+	local encodeStd = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+	local str = "StdEncoding is the standard base64 encoding, as defined in RFC 4648."
+	local stdBS = "U3RkRW5jb2RpbmcgaXMgdGhlIHN0YW5kYXJkIGJhc2U2NCBlbmNvZGluZywgYXMgZGVmaW5lZCBpbiBSRkMgNDY0OC4="
+	local nopadBS = "U3RkRW5jb2RpbmcgaXMgdGhlIHN0YW5kYXJkIGJhc2U2NCBlbmNvZGluZywgYXMgZGVmaW5lZCBpbiBSRkMgNDY0OC4"
+
+	local enc = base64.newEncoding(encodeStd)
+	if enc:encode(str) ~= stdBS then
+		return false
+	end
+
+	local encPad = enc:withPadding(base64.NO_PADDING)
+	if encPad:encode(str) ~= nopadBS then
+		return false
+	end
+
+	return true
+	`
+
+	err := L.DoString(code)
+	if !assert.NoError(t, err, `L.DoString should succeed`) {
+		return
+	}
+
+	if !assert.Equal(t, 1, L.GetTop(), "L.GetTop mismatching") {
+		return
+	}
+
+	ret := L.Get(-1)
+	if !assert.Equal(t, lua.LTBool, ret.Type(), "type mismatching") {
+		return
+	}
+
+	if !assert.Equal(t, lua.LTrue, ret.(lua.LBool), "value mismatching") {
+		return
+	}
+}
+
 func TestEncodingStd(t *testing.T) {
 	L := lua.NewState()
 	OpenBase64(L)

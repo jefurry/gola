@@ -9,12 +9,27 @@
 package encodinglib
 
 import (
+	"encoding/base64"
 	"github.com/yuin/gopher-lua"
 )
 
 const (
 	encodingBase64EncodingTypeName = EncodingBase64LibName + ".ENCODING*"
 )
+
+func encodingBase64EncodeWithPadding(L *lua.LState) int {
+	encoder := checkBase64Encoding(L, 1)
+	padding := L.OptInt(2, int(base64.StdPadding))
+
+	pad := rune(padding)
+	enc := encoder.WithPadding(pad)
+
+	ud := newBase64Encoding(L, enc)
+
+	L.Push(ud)
+
+	return 1
+}
 
 func encodingBase64EncodeToString(L *lua.LState) int {
 	enc := checkBase64Encoding(L, 1)
@@ -60,7 +75,8 @@ func encodingRegisterBase64EncodingMetatype(L *lua.LState) {
 }
 
 var encodingBase64EncodingFuncs = map[string]lua.LGFunction{
-	"encode": encodingBase64EncodeToString,
-	"decode": encodingBase64DecodeString,
-	"strict": encodingBase64EncodingStrict,
+	"encode":      encodingBase64EncodeToString,
+	"decode":      encodingBase64DecodeString,
+	"strict":      encodingBase64EncodingStrict,
+	"withPadding": encodingBase64EncodeWithPadding,
 }
