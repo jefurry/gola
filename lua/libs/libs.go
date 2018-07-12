@@ -22,6 +22,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/relib"
 	//"github.com/jefurry/gola/lua/libs/scrapelib"
 	"github.com/jefurry/gola/lua/libs/filepathlib"
+	"github.com/jefurry/gola/lua/libs/jwtlib"
 	"github.com/jefurry/gola/lua/libs/loglib"
 	"github.com/jefurry/gola/lua/libs/pathlib"
 	"github.com/jefurry/gola/lua/libs/socketlib"
@@ -57,4 +58,5 @@ func OpenLibs(L *lua.LState) {
 	socketlib.Open(L)
 	bit32lib.Open(L)
 	moonlib.Open(L)
+	jwtlib.Open(L)
 }
