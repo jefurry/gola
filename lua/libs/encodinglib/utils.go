@@ -9,6 +9,7 @@
 package encodinglib
 
 import (
+	"encoding/base32"
 	"encoding/base64"
 	"fmt"
 	"github.com/yuin/gopher-lua"
@@ -30,6 +31,26 @@ func checkBase64Encoding(L *lua.LState, n int) *base64.Encoding {
 	}
 
 	L.ArgError(n, fmt.Sprintf("%s expected, got %s", encodingBase64EncodingTypeName, ud.Type()))
+
+	return nil
+}
+
+func newBase32Encoding(L *lua.LState, enc *base32.Encoding) *lua.LUserData {
+	ud := L.NewUserData()
+	ud.Value = enc
+
+	L.SetMetatable(ud, L.GetTypeMetatable(encodingBase32EncodingTypeName))
+
+	return ud
+}
+
+func checkBase32Encoding(L *lua.LState, n int) *base32.Encoding {
+	ud := L.CheckUserData(n)
+	if v, ok := ud.Value.(*base32.Encoding); ok {
+		return v
+	}
+
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", encodingBase32EncodingTypeName, ud.Type()))
 
 	return nil
 }

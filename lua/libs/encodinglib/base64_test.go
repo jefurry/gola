@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestEncodingWithPadding(t *testing.T) {
+func TestBase64EncodingWithPadding(t *testing.T) {
 	L := lua.NewState()
 	OpenBase64(L)
 	defer L.Close()
@@ -59,7 +59,7 @@ func TestEncodingWithPadding(t *testing.T) {
 	}
 }
 
-func TestEncodingStd(t *testing.T) {
+func TestBase64EncodingStd(t *testing.T) {
 	L := lua.NewState()
 	OpenBase64(L)
 	defer L.Close()
@@ -125,7 +125,7 @@ func TestEncodingStd(t *testing.T) {
 	}
 }
 
-func TestEncodingURL(t *testing.T) {
+func TestBase64EncodingURL(t *testing.T) {
 	L := lua.NewState()
 	Open(L)
 	defer L.Close()
@@ -186,7 +186,7 @@ func TestEncodingURL(t *testing.T) {
 	}
 }
 
-func TestEncodingRawStd(t *testing.T) {
+func TestBase64EncodingRawStd(t *testing.T) {
 	L := lua.NewState()
 	Open(L)
 	defer L.Close()
@@ -228,7 +228,7 @@ func TestEncodingRawStd(t *testing.T) {
 	}
 }
 
-func TestEncodingRawURL(t *testing.T) {
+func TestBase64EncodingRawURL(t *testing.T) {
 	L := lua.NewState()
 	Open(L)
 	defer L.Close()
