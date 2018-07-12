@@ -51,6 +51,8 @@ func jwtParse(L *lua.LState) int {
 		switch alg {
 		case "none":
 			return jwt.UnsafeAllowNoneSignatureType, nil
+		case "HS256", "HS384", "HS512":
+			return []byte(key), nil
 		case "ES256", "ES384", "ES512":
 			return jwt.ParseECPublicKeyFromPEM([]byte(key))
 		case "RS256", "RS384", "RS512":
