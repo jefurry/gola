@@ -46,8 +46,17 @@ func jwtParse(L *lua.LState) int {
 	key := L.OptString(2, "")
 
 	token, err := gjwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		if t.Method.Alg() == "none" {
+		alg := t.Method.Alg()
+
+		switch alg {
+		case "none":
 			return jwt.UnsafeAllowNoneSignatureType, nil
+		case "ES256", "ES384", "ES512":
+			return jwt.ParseECPublicKeyFromPEM([]byte(key))
+		case "RS256", "RS384", "RS512":
+			return jwt.ParseRSAPublicKeyFromPEM([]byte(key))
+		case "PS256", "PS384", "PS512":
+			return jwt.ParseRSAPublicKeyFromPEM([]byte(key))
 		}
 
 		return []byte(key), nil
@@ -103,18 +112,27 @@ var jwtSigningMethodTypeFields = map[string]gjwt.SigningMethodType{
 	"SIGNING_METHOD_HS_TYPE":      gjwt.SIGNING_METHOD_HS_TYPE,
 	"SIGNING_METHOD_ES_TYPE":      gjwt.SIGNING_METHOD_ES_TYPE,
 	"SIGNING_METHOD_RS_TYPE":      gjwt.SIGNING_METHOD_RS_TYPE,
+	"SIGNING_METHOD_PS_TYPE":      gjwt.SIGNING_METHOD_PS_TYPE,
 }
 
 var jwtSigningMethodFields = map[string]gjwt.SigningMethod{
 	"SIGNING_METHOD_INVALID": gjwt.SIGNING_METHOD_INVALID,
-	"SIGNING_METHOD_NONE":    gjwt.SIGNING_METHOD_NONE,
-	"SIGNING_METHOD_HS256":   gjwt.SIGNING_METHOD_HS256,
-	"SIGNING_METHOD_HS384":   gjwt.SIGNING_METHOD_HS384,
-	"SIGNING_METHOD_HS512":   gjwt.SIGNING_METHOD_HS512,
-	"SIGNING_METHOD_ES256":   gjwt.SIGNING_METHOD_ES256,
-	"SIGNING_METHOD_ES384":   gjwt.SIGNING_METHOD_ES384,
-	"SIGNING_METHOD_ES512":   gjwt.SIGNING_METHOD_ES512,
-	"SIGNING_METHOD_RS256":   gjwt.SIGNING_METHOD_RS256,
-	"SIGNING_METHOD_RS384":   gjwt.SIGNING_METHOD_RS384,
-	"SIGNING_METHOD_RS512":   gjwt.SIGNING_METHOD_RS512,
+
+	"SIGNING_METHOD_NONE": gjwt.SIGNING_METHOD_NONE,
+
+	"SIGNING_METHOD_HS256": gjwt.SIGNING_METHOD_HS256,
+	"SIGNING_METHOD_HS384": gjwt.SIGNING_METHOD_HS384,
+	"SIGNING_METHOD_HS512": gjwt.SIGNING_METHOD_HS512,
+
+	"SIGNING_METHOD_ES256": gjwt.SIGNING_METHOD_ES256,
+	"SIGNING_METHOD_ES384": gjwt.SIGNING_METHOD_ES384,
+	"SIGNING_METHOD_ES512": gjwt.SIGNING_METHOD_ES512,
+
+	"SIGNING_METHOD_RS256": gjwt.SIGNING_METHOD_RS256,
+	"SIGNING_METHOD_RS384": gjwt.SIGNING_METHOD_RS384,
+	"SIGNING_METHOD_RS512": gjwt.SIGNING_METHOD_RS512,
+
+	"SIGNING_METHOD_PS256": gjwt.SIGNING_METHOD_PS256,
+	"SIGNING_METHOD_PS384": gjwt.SIGNING_METHOD_PS384,
+	"SIGNING_METHOD_PS512": gjwt.SIGNING_METHOD_PS512,
 }

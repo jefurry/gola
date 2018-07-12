@@ -87,8 +87,9 @@ func jwtTokenGetClaims(L *lua.LState) int {
 func jwtTokenSigned(L *lua.LState) int {
 	token := checkToken(L, 1)
 	key := L.OptString(2, "")
+	password := L.OptString(3, "")
 
-	s, err := token.Signed(key)
+	s, err := token.Signed(key, password)
 	if err != nil {
 		L.Push(lua.LNil)
 		L.Push(lua.LString(err.Error()))
