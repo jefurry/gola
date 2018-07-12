@@ -25,15 +25,7 @@ func HexLoader(L *lua.LState) int {
 	hexmod := L.SetFuncs(L.NewTable(), encodingHexFuncs)
 	L.Push(hexmod)
 
-	encodingRegisterBase32EncodingMetatype(L)
-
 	L.SetFuncs(hexmod, encodingHexFuncs)
-	//L.SetField(hexmod, "StdEncoding", newBase32Encoding(L, base32.StdEncoding))
-	//L.SetField(hexmod, "HexEncoding", newBase32Encoding(L, base32.HexEncoding))
-
-	for k, v := range encodingBase32Fields {
-		hexmod.RawSetString(k, v)
-	}
 
 	return 1
 }
