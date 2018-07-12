@@ -19,7 +19,10 @@ const (
 
 func Open(L *lua.LState) {
 	L.PreloadModule(EncodingLibName, Loader)
+
 	OpenBase64(L)
+	OpenBase32(L)
+	OpenHex(L)
 }
 
 func Loader(L *lua.LState) int {
