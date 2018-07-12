@@ -22,12 +22,11 @@ func OpenBase32(L *lua.LState) {
 }
 
 func Base32Loader(L *lua.LState) int {
-	encbase32mod := L.SetFuncs(L.NewTable(), encodingBase32EncodingFuncs)
+	encbase32mod := L.SetFuncs(L.NewTable(), encodingBase32Funcs)
 	L.Push(encbase32mod)
 
 	encodingRegisterBase32EncodingMetatype(L)
 
-	L.SetFuncs(encbase32mod, encodingBase32Funcs)
 	L.SetField(encbase32mod, "StdEncoding", newBase32Encoding(L, base32.StdEncoding))
 	L.SetField(encbase32mod, "HexEncoding", newBase32Encoding(L, base32.HexEncoding))
 

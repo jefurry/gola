@@ -22,12 +22,11 @@ func OpenBase64(L *lua.LState) {
 }
 
 func Base64Loader(L *lua.LState) int {
-	encbase64mod := L.SetFuncs(L.NewTable(), encodingBase64EncodingFuncs)
+	encbase64mod := L.SetFuncs(L.NewTable(), encodingBase64Funcs)
 	L.Push(encbase64mod)
 
 	encodingRegisterBase64EncodingMetatype(L)
 
-	L.SetFuncs(encbase64mod, encodingBase64Funcs)
 	L.SetField(encbase64mod, "StdEncoding", newBase64Encoding(L, base64.StdEncoding))
 	L.SetField(encbase64mod, "URLEncoding", newBase64Encoding(L, base64.URLEncoding))
 	L.SetField(encbase64mod, "RawStdEncoding", newBase64Encoding(L, base64.RawStdEncoding))

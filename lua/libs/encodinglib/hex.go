@@ -25,8 +25,6 @@ func HexLoader(L *lua.LState) int {
 	hexmod := L.SetFuncs(L.NewTable(), encodingHexFuncs)
 	L.Push(hexmod)
 
-	L.SetFuncs(hexmod, encodingHexFuncs)
-
 	return 1
 }
 
