@@ -75,6 +75,10 @@ func (t *Token) GetClaims() jwt.Claims {
 	return t.tk.Claims
 }
 
+func (t *Token) Valid() bool {
+	return t.tk.Valid
+}
+
 func Parse(tokenString string, keyFunc jwt.Keyfunc) (*Token, error) {
 	tk, err := jwt.Parse(tokenString, keyFunc)
 	if err != nil {
