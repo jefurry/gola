@@ -6,5 +6,5 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-// Package jwt implements json web token for Lua.
+// Package jwt implements json web token.
 package jwt
