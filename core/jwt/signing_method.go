@@ -24,6 +24,8 @@ const (
 	SIGNING_METHOD_ES_TYPE
 	// RS
 	SIGNING_METHOD_RS_TYPE
+	// PS
+	SIGNING_METHOD_PS_TYPE
 )
 
 const (
@@ -46,6 +48,11 @@ const (
 	SIGNING_METHOD_RS256
 	SIGNING_METHOD_RS384
 	SIGNING_METHOD_RS512
+
+	// PS
+	SIGNING_METHOD_PS256
+	SIGNING_METHOD_PS384
+	SIGNING_METHOD_PS512
 )
 
 var (
@@ -79,6 +86,12 @@ func signingMethod(method SigningMethod) (jwt.SigningMethod, SigningMethodType, 
 		return jwt.SigningMethodRS384, SIGNING_METHOD_RS_TYPE, nil
 	case SIGNING_METHOD_RS512:
 		return jwt.SigningMethodRS512, SIGNING_METHOD_RS_TYPE, nil
+	case SIGNING_METHOD_PS256:
+		return jwt.SigningMethodPS256, SIGNING_METHOD_PS_TYPE, nil
+	case SIGNING_METHOD_PS384:
+		return jwt.SigningMethodPS384, SIGNING_METHOD_PS_TYPE, nil
+	case SIGNING_METHOD_PS512:
+		return jwt.SigningMethodPS512, SIGNING_METHOD_PS_TYPE, nil
 	}
 
 	return nil, SIGNING_METHOD_INVALID_TYPE, ErrInvalidSigningMethod

@@ -42,7 +42,7 @@ func New(method SigningMethod, claims ...jwt.Claims) (*Token, error) {
 }
 
 // Get the complete, signed token
-func (t *Token) Signed(key string) (string, error) {
+func (t *Token) Signed(key string, password ...string) (string, error) {
 	switch t.mt {
 	case SIGNING_METHOD_NONE_TYPE:
 		return t.tk.SignedString(jwt.UnsafeAllowNoneSignatureType)
@@ -57,6 +57,18 @@ func (t *Token) Signed(key string) (string, error) {
 		return t.tk.SignedString(k)
 	case SIGNING_METHOD_RS_TYPE:
 		k, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(key))
+		if err != nil {
+			return "", err
+		}
+
+		return t.tk.SignedString(k)
+	case SIGNING_METHOD_PS_TYPE:
+		pwd := ""
+		if len(password) > 0 {
+			pwd = password[0]
+		}
+
+		k, err := jwt.ParseRSAPrivateKeyFromPEMWithPassword([]byte(key), pwd)
 		if err != nil {
 			return "", err
 		}
@@ -108,6 +120,8 @@ func methodType(method jwt.SigningMethod) SigningMethodType {
 		return SIGNING_METHOD_ES_TYPE
 	case "RS256", "RS384", "RS512":
 		return SIGNING_METHOD_RS_TYPE
+	case "PS256", "PS384", "PS512":
+		return SIGNING_METHOD_PS_TYPE
 	}
 
 	return SIGNING_METHOD_INVALID_TYPE
