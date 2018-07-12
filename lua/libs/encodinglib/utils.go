@@ -54,3 +54,43 @@ func checkBase32Encoding(L *lua.LState, n int) *base32.Encoding {
 
 	return nil
 }
+
+func newBinaryReader(L *lua.LState, br *encodingBinaryReader) *lua.LUserData {
+	ud := L.NewUserData()
+	ud.Value = br
+
+	L.SetMetatable(ud, L.GetTypeMetatable(encodingBinaryReaderTypeName))
+
+	return ud
+}
+
+func checkBinaryReader(L *lua.LState, n int) *encodingBinaryReader {
+	ud := L.CheckUserData(n)
+	if v, ok := ud.Value.(*encodingBinaryReader); ok {
+		return v
+	}
+
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", encodingBinaryReaderTypeName, ud.Type()))
+
+	return nil
+}
+
+func newBinaryWriter(L *lua.LState, wr *encodingBinaryWriter) *lua.LUserData {
+	ud := L.NewUserData()
+	ud.Value = wr
+
+	L.SetMetatable(ud, L.GetTypeMetatable(encodingBinaryWriterTypeName))
+
+	return ud
+}
+
+func checkBinaryWriter(L *lua.LState, n int) *encodingBinaryWriter {
+	ud := L.CheckUserData(n)
+	if v, ok := ud.Value.(*encodingBinaryWriter); ok {
+		return v
+	}
+
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", encodingBinaryWriterTypeName, ud.Type()))
+
+	return nil
+}

@@ -23,6 +23,7 @@ func Open(L *lua.LState) {
 	OpenBase64(L)
 	OpenBase32(L)
 	OpenHex(L)
+	OpenBinary(L)
 }
 
 func Loader(L *lua.LState) int {
