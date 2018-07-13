@@ -9,7 +9,7 @@
 package jwt
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	djwt "github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -29,8 +29,8 @@ func TestTokenNone(t *testing.T) {
 		return
 	}
 
-	newToken, err := Parse(es, func(t *jwt.Token) (interface{}, error) {
-		return jwt.UnsafeAllowNoneSignatureType, nil
+	newToken, err := Parse(es, func(t *djwt.Token) (interface{}, error) {
+		return djwt.UnsafeAllowNoneSignatureType, nil
 	})
 	if !assert.NoError(t, err, "Parse should succeed") {
 		return
@@ -58,7 +58,7 @@ func TestTokenHS(t *testing.T) {
 		return
 	}
 
-	newToken, err := Parse(es, func(t *jwt.Token) (interface{}, error) {
+	newToken, err := Parse(es, func(t *djwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if !assert.NoError(t, err, "Parse should succeed") {
@@ -87,7 +87,7 @@ func TestTokenES(t *testing.T) {
 		return
 	}
 
-	_, err = Parse(es, func(t *jwt.Token) (interface{}, error) {
+	_, err = Parse(es, func(t *djwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if !assert.Error(t, err, "Parse should succeed") {
@@ -112,7 +112,7 @@ func TestTokenRS(t *testing.T) {
 		return
 	}
 
-	_, err = Parse(es, func(t *jwt.Token) (interface{}, error) {
+	_, err = Parse(es, func(t *djwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if !assert.Error(t, err, "Parse should succeed") {

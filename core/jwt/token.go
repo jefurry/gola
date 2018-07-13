@@ -9,30 +9,30 @@
 package jwt
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	djwt "github.com/dgrijalva/jwt-go"
 )
 
 type (
 	Token struct {
-		tk *jwt.Token
+		tk *djwt.Token
 		mt SigningMethodType
 	}
 )
 
-func makeToken(method SigningMethod, claims ...jwt.Claims) (*jwt.Token, SigningMethodType, error) {
+func makeToken(method SigningMethod, claims ...djwt.Claims) (*djwt.Token, SigningMethodType, error) {
 	m, mt, err := signingMethod(method)
 	if err != nil {
 		return nil, mt, err
 	}
 
 	if len(claims) > 0 {
-		return jwt.NewWithClaims(m, claims[0]), mt, nil
+		return djwt.NewWithClaims(m, claims[0]), mt, nil
 	}
 
-	return jwt.New(m), mt, nil
+	return djwt.New(m), mt, nil
 }
 
-func New(method SigningMethod, claims ...jwt.Claims) (*Token, error) {
+func New(method SigningMethod, claims ...djwt.Claims) (*Token, error) {
 	tk, mt, err := makeToken(method, claims...)
 	if err != nil {
 		return nil, err
@@ -45,18 +45,18 @@ func New(method SigningMethod, claims ...jwt.Claims) (*Token, error) {
 func (t *Token) Signed(key string, password ...string) (string, error) {
 	switch t.mt {
 	case SIGNING_METHOD_NONE_TYPE:
-		return t.tk.SignedString(jwt.UnsafeAllowNoneSignatureType)
+		return t.tk.SignedString(djwt.UnsafeAllowNoneSignatureType)
 	case SIGNING_METHOD_HS_TYPE:
 		return t.tk.SignedString([]byte(key))
 	case SIGNING_METHOD_ES_TYPE:
-		k, err := jwt.ParseECPrivateKeyFromPEM([]byte(key))
+		k, err := djwt.ParseECPrivateKeyFromPEM([]byte(key))
 		if err != nil {
 			return "", err
 		}
 
 		return t.tk.SignedString(k)
 	case SIGNING_METHOD_RS_TYPE:
-		k, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(key))
+		k, err := djwt.ParseRSAPrivateKeyFromPEM([]byte(key))
 		if err != nil {
 			return "", err
 		}
@@ -68,7 +68,7 @@ func (t *Token) Signed(key string, password ...string) (string, error) {
 			pwd = password[0]
 		}
 
-		k, err := jwt.ParseRSAPrivateKeyFromPEMWithPassword([]byte(key), pwd)
+		k, err := djwt.ParseRSAPrivateKeyFromPEMWithPassword([]byte(key), pwd)
 		if err != nil {
 			return "", err
 		}
@@ -79,11 +79,11 @@ func (t *Token) Signed(key string, password ...string) (string, error) {
 	return "", ErrInvalidSigningMethod
 }
 
-func (t *Token) GetToken() *jwt.Token {
+func (t *Token) GetToken() *djwt.Token {
 	return t.tk
 }
 
-func (t *Token) GetClaims() jwt.Claims {
+func (t *Token) GetClaims() djwt.Claims {
 	return t.tk.Claims
 }
 
@@ -91,8 +91,8 @@ func (t *Token) Valid() bool {
 	return t.tk.Valid
 }
 
-func Parse(tokenString string, keyFunc jwt.Keyfunc) (*Token, error) {
-	tk, err := jwt.Parse(tokenString, keyFunc)
+func Parse(tokenString string, keyFunc djwt.Keyfunc) (*Token, error) {
+	tk, err := djwt.Parse(tokenString, keyFunc)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +100,8 @@ func Parse(tokenString string, keyFunc jwt.Keyfunc) (*Token, error) {
 	return &Token{tk: tk, mt: methodType(tk.Method)}, nil
 }
 
-func ParseWithClaims(tokenString string, claims jwt.Claims, keyFunc jwt.Keyfunc) (*Token, error) {
-	tk, err := jwt.ParseWithClaims(tokenString, claims, keyFunc)
+func ParseWithClaims(tokenString string, claims djwt.Claims, keyFunc djwt.Keyfunc) (*Token, error) {
+	tk, err := djwt.ParseWithClaims(tokenString, claims, keyFunc)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func ParseWithClaims(tokenString string, claims jwt.Claims, keyFunc jwt.Keyfunc)
 	return &Token{tk: tk, mt: methodType(tk.Method)}, nil
 }
 
-func methodType(method jwt.SigningMethod) SigningMethodType {
+func methodType(method djwt.SigningMethod) SigningMethodType {
 	alg := method.Alg()
 	switch alg {
 	case "none":
