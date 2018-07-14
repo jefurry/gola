@@ -17,7 +17,7 @@ import (
 func Unpack(format string, bs []byte) ([]interface{}, error) {
 	vals := make([]interface{}, 0, 0)
 	buf := bytes.NewBuffer(bs)
-	err := scanToken(format, func(psym, c byte, num int) error {
+	err := ScanToken(format, func(psym, c byte, num int) error {
 		order := getByteOrder(psym)
 
 		var skipNum int

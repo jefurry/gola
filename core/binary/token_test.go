@@ -33,7 +33,7 @@ func TestScanToken(t *testing.T) {
 			haserr: false,
 		},
 	} {
-		err := scanToken(v.format, func(psym, c byte, num int) error {
+		err := ScanToken(v.format, func(psym, c byte, num int) error {
 			return nil
 		})
 
@@ -75,7 +75,7 @@ func TestSplitToken(t *testing.T) {
 			precursorSymbol: ">",
 		},
 	} {
-		tokens, err := splitToken(v.format)
+		tokens, err := SplitToken(v.format)
 		if v.haserr {
 			if !assert.Error(t, err, "splitToken should be not succeed") {
 				return

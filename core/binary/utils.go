@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-func scanToken(s string, handler func(psym, c byte, num int) error) error {
+func ScanToken(s string, handler func(psym, c byte, num int) error) error {
 	scanner := bufio.NewScanner(strings.NewReader(s))
 	scanner.Split(bufio.ScanBytes)
 
@@ -73,7 +73,7 @@ func scanToken(s string, handler func(psym, c byte, num int) error) error {
 	return nil
 }
 
-func splitToken(s string) ([]string, error) {
+func SplitToken(s string) ([]string, error) {
 	scanner := bufio.NewScanner(strings.NewReader(s))
 	scanner.Split(bufio.ScanBytes)
 
