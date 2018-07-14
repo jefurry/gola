@@ -52,3 +52,9 @@ func checkBinaryWriter(L *lua.LState, n int) *binaryWriter {
 
 	return nil
 }
+
+func checkPackVal(L *lua.LState, n int) lua.LValue {
+	L.CheckTypes(n, lua.LTNumber, lua.LTBool, lua.LTString)
+
+	return L.CheckAny(n)
+}

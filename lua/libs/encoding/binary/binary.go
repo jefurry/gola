@@ -7,6 +7,7 @@
 // license that can be found in the LICENSE file.
 
 // Package binary implements binary encoding for Lua.
+// implements pack/unpack. like struct.pack/struct.unpack of python2(https://docs.python.org/2/library/struct.html).
 package binary
 
 import (
@@ -55,6 +56,7 @@ func Loader(L *lua.LState) int {
 
 	binaryRegisterReaderMetatype(L)
 	binaryRegisterWriterMetatype(L)
+	binaryRegisterUnpackRetbMetatype(L)
 
 	for k, v := range binaryByteOrderFields {
 		binmod.RawSetString(k, lua.LNumber(v))
@@ -70,6 +72,8 @@ func Loader(L *lua.LState) int {
 var binaryFuncs = map[string]lua.LGFunction{
 	"newReader": binaryReaderNew,
 	"newWriter": binaryWriterNew,
+	"pack":      binaryPack,
+	"unpack":    binaryUnpack,
 }
 
 var binaryByteOrderFields = map[string]ByteOrder{
