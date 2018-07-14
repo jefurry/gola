@@ -23,7 +23,7 @@ func Pack(format string, val interface{}, vals ...interface{}) ([]byte, error) {
 	offset := 0
 	buf := bytes.NewBuffer(nil)
 	err := ScanToken(format, func(psym, c byte, num int) error {
-		order := getByteOrder(psym)
+		order := GetByteOrder(psym)
 
 		if num == 0 {
 			offset += 1

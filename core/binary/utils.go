@@ -34,7 +34,7 @@ func ScanToken(s string, handler func(psym, c byte, num int) error) error {
 
 		if idx == 0 {
 			idx += 1
-			if inPrecursorSymbols(c) {
+			if InPrecursorSymbols(c) {
 				psym = c
 				continue
 			}
@@ -46,7 +46,7 @@ func ScanToken(s string, handler func(psym, c byte, num int) error) error {
 			continue
 		}
 
-		if !inAllowFormatSymbols(c) {
+		if !InAllowFormatSymbols(c) {
 			return errors.Errorf("unknown format character for '%c'", c)
 		}
 
@@ -93,7 +93,7 @@ func SplitToken(s string) ([]string, error) {
 		// '@', '=', '<', '>', '!'
 		if idx == 0 {
 			idx += 1
-			if !inPrecursorSymbols(c) {
+			if !InPrecursorSymbols(c) {
 				tokens = append(tokens, string(DefaultPrecursorSymbol))
 			} else {
 				tokens = append(tokens, string(c))
@@ -107,7 +107,7 @@ func SplitToken(s string) ([]string, error) {
 			continue
 		}
 
-		if !inAllowFormatSymbols(c) {
+		if !InAllowFormatSymbols(c) {
 			return nil, errors.Errorf("unknown format character for '%c'", c)
 		}
 
@@ -123,7 +123,7 @@ func SplitToken(s string) ([]string, error) {
 	return tokens, nil
 }
 
-func inAllowFormatSymbols(c byte) bool {
+func InAllowFormatSymbols(c byte) bool {
 	for _, r := range AllowFormatSymbols {
 		if r == c {
 			return true
@@ -133,7 +133,7 @@ func inAllowFormatSymbols(c byte) bool {
 	return false
 }
 
-func inPrecursorSymbols(c byte) bool {
+func InPrecursorSymbols(c byte) bool {
 	if c == AtPrecursorSymbol || c == EqualPrecursorSymbol ||
 		c == LTPrecursorSymbol || c == GTPrecursorSymbol ||
 		c == BangPrecursorSymbol {
@@ -143,7 +143,7 @@ func inPrecursorSymbols(c byte) bool {
 	return false
 }
 
-func getByteOrder(psym byte) binary.ByteOrder {
+func GetByteOrder(psym byte) binary.ByteOrder {
 	switch psym {
 	case AtPrecursorSymbol, EqualPrecursorSymbol:
 		return nativeByteOrder
