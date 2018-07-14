@@ -28,7 +28,7 @@ const (
 
 const (
 	diInjectorSkipClassMethodParamName lua.LString = "self"
-	diInjectorInjectClassMethodName    string      = "inject"
+	diInjectorInjectClassMethodName    string      = "injector"
 )
 
 type (

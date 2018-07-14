@@ -29,7 +29,7 @@ func TestInjectorInstantiate_1(t *testing.T) {
 	end
 
 	local Person = di.createClass{className="Person", name="Jeff"}
-	function Person:inject(animal)
+	function Person:injector(animal)
 		self.animal = animal
 	end
 	function Person:say(message)
@@ -116,7 +116,7 @@ func TestInjectorInstantiate_2(t *testing.T) {
 	function Cat:init()
 		--print("call init method of Cat class by di.")
 	end
-	function Cat:inject(catName)
+	function Cat:injector(catName)
 		self.name = catName
 	end
 
@@ -124,12 +124,12 @@ func TestInjectorInstantiate_2(t *testing.T) {
 	function Dog:init()
 		--print("call init method of Dog class by di.")
 	end
-	function Dog:inject(dogName)
+	function Dog:injector(dogName)
 		self.name = dogName
 	end
 
 	local Person = di.createClass{className="Person", name="Jeff"}
-	function Person:inject(cat, dog)
+	function Person:injector(cat, dog)
 		self.cat = cat
 		self.dog = dog
 	end
@@ -190,12 +190,12 @@ func TestInjectorInstantiate_3(t *testing.T) {
 	function Cat:init()
 		--print("call init method of Cat class by di.")
 	end
-	function Cat:inject(person)
+	function Cat:injector(person)
 		self.person = person
 	end
 
 	local Person = di.createClass{className="Person", name="Jeff"}
-	function Person:inject(cat)
+	function Person:injector(cat)
 		self.cat = cat
 	end
 
