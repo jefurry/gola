@@ -15,8 +15,8 @@ import (
 
 func checkInjector(L *lua.LState, n int) *diInjector {
 	ud := L.CheckUserData(n)
-	if dii, ok := ud.Value.(*diInjector); ok {
-		return dii
+	if v, ok := ud.Value.(*diInjector); ok {
+		return v
 	}
 
 	L.ArgError(n, fmt.Sprintf("%s expected, got %s", diInjectorTypeName, ud.Type()))
