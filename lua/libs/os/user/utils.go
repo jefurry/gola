@@ -18,7 +18,7 @@ func newUser(L *lua.LState, user *uuser.User) *lua.LUserData {
 	ud := L.NewUserData()
 	ud.Value = user
 
-	L.SetMetatable(ud, L.GetTypeMetatable(osuserUserTypeName))
+	L.SetMetatable(ud, L.GetTypeMetatable(userUserTypeName))
 
 	return ud
 }
@@ -29,7 +29,7 @@ func checkUser(L *lua.LState, n int) *uuser.User {
 		return v
 	}
 
-	L.ArgError(n, fmt.Sprintf("%s expected, got %s", osuserUserTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", userUserTypeName, ud.Type()))
 
 	return nil
 }
@@ -38,7 +38,7 @@ func newGroup(L *lua.LState, user *uuser.Group) *lua.LUserData {
 	ud := L.NewUserData()
 	ud.Value = user
 
-	L.SetMetatable(ud, L.GetTypeMetatable(osuserGroupTypeName))
+	L.SetMetatable(ud, L.GetTypeMetatable(userGroupTypeName))
 
 	return ud
 }
@@ -49,7 +49,7 @@ func checkGroup(L *lua.LState, n int) *uuser.Group {
 		return v
 	}
 
-	L.ArgError(n, fmt.Sprintf("%s expected, got %s", osuserGroupTypeName, ud.Type()))
+	L.ArgError(n, fmt.Sprintf("%s expected, got %s", userGroupTypeName, ud.Type()))
 
 	return nil
 }

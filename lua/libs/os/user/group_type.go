@@ -13,12 +13,12 @@ import (
 )
 
 const (
-	osuserGroupTypeName = UserLibName + ".GROUP*"
+	userGroupTypeName = UserLibName + ".GROUP*"
 )
 
 func userRegisterGroupMetatype(L *lua.LState) {
 	// meta table
-	mt := L.NewTypeMetatable(osuserGroupTypeName)
+	mt := L.NewTypeMetatable(userGroupTypeName)
 
 	// methods
 	L.SetField(mt, "__index", L.SetFuncs(L.NewTable(), userGroupFuncs))

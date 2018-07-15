@@ -13,12 +13,12 @@ import (
 )
 
 const (
-	osuserUserTypeName = UserLibName + ".USER*"
+	userUserTypeName = UserLibName + ".USER*"
 )
 
 func userRegisterUserMetatype(L *lua.LState) {
 	// meta table
-	mt := L.NewTypeMetatable(osuserUserTypeName)
+	mt := L.NewTypeMetatable(userUserTypeName)
 
 	// methods
 	L.SetField(mt, "__index", L.SetFuncs(L.NewTable(), userUserFuncs))
