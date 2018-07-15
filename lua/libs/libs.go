@@ -20,6 +20,7 @@ import (
 	"github.com/jefurry/gola/lua/libs/os"
 	"github.com/jefurry/gola/lua/libs/re"
 	//"github.com/jefurry/gola/lua/libs/scrape"
+	"github.com/jefurry/gola/lua/libs/charset"
 	"github.com/jefurry/gola/lua/libs/encoding"
 	"github.com/jefurry/gola/lua/libs/jwt"
 	"github.com/jefurry/gola/lua/libs/log"
@@ -41,6 +42,7 @@ func OpenLibs(L *lua.LState) {
 	path.Open(L)
 	time.Open(L)
 	encoding.Open(L)
+	charset.Open(L)
 	di.Open(L)
 	log.Open(L)
 	event.Open(L)
