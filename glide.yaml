@@ -28,6 +28,7 @@ import:
   - html/atom
 - package: github.com/dgrijalva/jwt-go
   version: ^3.2.0
+- package: github.com/yuin/charsetutil
 testImport:
 - package: github.com/stretchr/testify
   version: ^1.2.2
