@@ -59,5 +59,5 @@ func charsetDecode(L *lua.LState) int {
 
 var charsetFuncs = map[string]lua.LGFunction{
 	"encode": charsetEncode,
-	"eecode": charsetDecode,
+	"decode": charsetDecode,
 }
