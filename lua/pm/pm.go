@@ -302,7 +302,7 @@ func (lpm *LPM) Cap() int {
 
 func (lpm *LPM) Close(ls *lState) {
 	lpm.lock.Lock()
-	lpm.lock.Unlock()
+	defer lpm.lock.Unlock()
 
 	if !ls.serving {
 		panic("lua state not running")
